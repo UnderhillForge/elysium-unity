@@ -27,6 +27,55 @@ namespace Elysium.Characters
             return TryLoadFromWorldRoot(rootPath, out characters, out error);
         }
 
+        public bool TrySaveToWorldRoot(
+            string worldRootPath,
+            IReadOnlyList<CharacterRecord> characters,
+            out string error)
+        {
+            error = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(worldRootPath))
+            {
+                error = "World root path is empty.";
+                return false;
+            }
+
+            var galleryPath = GetGalleryPath(worldRootPath);
+            var directoryPath = Path.GetDirectoryName(galleryPath);
+            if (string.IsNullOrWhiteSpace(directoryPath))
+            {
+                error = $"Could not resolve gallery directory for '{galleryPath}'.";
+                return false;
+            }
+
+            Directory.CreateDirectory(directoryPath);
+
+            var file = new CharacterGalleryFile();
+            if (characters != null)
+            {
+                for (var i = 0; i < characters.Count; i++)
+                {
+                    var character = characters[i];
+                    if (character != null)
+                    {
+                        file.characters.Add(character);
+                    }
+                }
+            }
+
+            try
+            {
+                File.WriteAllText(galleryPath, JsonUtility.ToJson(file, true));
+            }
+            catch (Exception ex)
+            {
+                error = $"Failed writing character gallery: {ex.Message}";
+                return false;
+            }
+
+            return true;
+        }
+
         public bool TryLoadFromWorldRoot(
             string worldRootPath,
             out IReadOnlyList<CharacterRecord> characters,
@@ -111,6 +160,11 @@ namespace Elysium.Characters
             }
 
             return null;
+        }
+
+        public string GetGalleryPath(string worldRootPath)
+        {
+            return Path.Combine(worldRootPath ?? string.Empty, GalleryRelativePath);
         }
     }
 }

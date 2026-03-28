@@ -77,6 +77,7 @@ jobs:
             "[DedicatedServer] PASS"
             "[AreaLifecycle] PASS"
             "[CharacterGallery] PASS"
+            "[CharacterCreation] PASS"
             "MoonSharp path: active"
           )
 
@@ -103,7 +104,7 @@ jobs:
             echo ""
             if [[ -f "$GITHUB_WORKSPACE/core-smoke.log" ]]; then
               echo "### Required markers"
-              for marker in "[Session] PASS" "[Combat] PASS" "[LuaContextBindings] PASS" "[Persistence] PASS" "[PackagingPortability] PASS" "[WorldOwnership] PASS" "[DedicatedServer] PASS" "[AreaLifecycle] PASS" "[CharacterGallery] PASS" "MoonSharp path: active"; do
+              for marker in "[Session] PASS" "[Combat] PASS" "[LuaContextBindings] PASS" "[Persistence] PASS" "[PackagingPortability] PASS" "[WorldOwnership] PASS" "[DedicatedServer] PASS" "[AreaLifecycle] PASS" "[CharacterGallery] PASS" "[CharacterCreation] PASS" "MoonSharp path: active"; do
                 if grep -Fq "$marker" "$GITHUB_WORKSPACE/core-smoke.log"; then
                   echo "- PASS: $marker"
                 else
