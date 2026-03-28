@@ -1,0 +1,12 @@
+{
+  "areaId": "area_forest_edge",
+  "displayName": "Forest Edge",
+  "biome": "TemperateForest",
+  "sizeMeters": {
+    "x": 128,
+    "z": 128
+  },
+  "entrySpawnId": "spawn_player_entry",
+  "lightingProfile": "day_clear",
+  "musicCue": "ambient_forest_01"
+}

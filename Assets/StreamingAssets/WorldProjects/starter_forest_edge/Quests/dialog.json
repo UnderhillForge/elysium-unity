@@ -1,0 +1,12 @@
+{
+  "dialogs": [
+    {
+      "id": "dlg_outpost_intro",
+      "speaker": "Outpost Scout",
+      "lines": [
+        "Bandits have blocked the road ahead.",
+        "If you clear them out, we can reopen trade."
+      ]
+    }
+  ]
+}

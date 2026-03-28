@@ -1,0 +1,20 @@
+{
+  "npcs": [
+    {
+      "id": "npc_bandit_leader",
+      "displayName": "Bandit Captain",
+      "creatureRef": "pf1e://bestiary/human-bandit-captain",
+      "luaAttachment": "Scripts/npcs/bandit_leader.lua"
+    },
+    {
+      "id": "npc_bandit_01",
+      "displayName": "Bandit",
+      "creatureRef": "pf1e://bestiary/human-bandit"
+    },
+    {
+      "id": "npc_bandit_02",
+      "displayName": "Bandit",
+      "creatureRef": "pf1e://bestiary/human-bandit"
+    }
+  ]
+}

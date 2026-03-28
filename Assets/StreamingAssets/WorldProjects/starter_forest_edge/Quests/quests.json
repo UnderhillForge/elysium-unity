@@ -1,0 +1,13 @@
+{
+  "quests": [
+    {
+      "id": "qst_forest_road",
+      "title": "Clear The Forest Road",
+      "state": "NotStarted",
+      "steps": [
+        "Defeat roadside bandits",
+        "Report back to the outpost"
+      ]
+    }
+  ]
+}

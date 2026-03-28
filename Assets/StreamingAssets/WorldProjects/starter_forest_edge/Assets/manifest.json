@@ -1,0 +1,10 @@
+{
+  "entries": [
+    {
+      "id": "environment/campfire",
+      "type": "Prefab",
+      "path": "Assets/bundles/environment.bundle",
+      "redistributable": true
+    }
+  ]
+}

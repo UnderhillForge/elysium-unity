@@ -1,0 +1,14 @@
+World projects are the editable source-of-truth format for Elysium worlds.
+
+Recommended structure:
+
+WorldProject/
+  project.json
+  preview.png
+  Databases/
+  Areas/
+  Actors/
+  Quests/
+  Scripts/
+  Assets/
+  Dependencies/

@@ -1,0 +1,13 @@
+{
+  "projectId": "com.elysium.world.starter-forest-edge",
+  "displayName": "Starter Forest Edge",
+  "author": "Elysium Team",
+  "ruleset": "Pathfinder1e",
+  "entryAreaId": "area_forest_edge",
+  "worldDatabasePath": "Databases/world.db",
+  "campaignDatabasePath": "Databases/campaign.db",
+  "createdUtc": "2026-03-26T00:00:00Z",
+  "updatedUtc": "2026-03-26T00:00:00Z",
+  "defaultPackageMode": "Template",
+  "notes": "Starter world project scaffold for authoring and .ewm export."
+}

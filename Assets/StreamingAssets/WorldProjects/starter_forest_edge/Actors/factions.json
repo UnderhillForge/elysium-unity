@@ -1,0 +1,14 @@
+{
+  "factions": [
+    {
+      "id": "faction_players",
+      "displayName": "Players",
+      "defaultDisposition": "Neutral"
+    },
+    {
+      "id": "faction_bandits",
+      "displayName": "Bandits",
+      "defaultDisposition": "Hostile"
+    }
+  ]
+}

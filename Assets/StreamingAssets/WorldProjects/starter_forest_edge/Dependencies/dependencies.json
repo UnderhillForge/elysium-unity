@@ -1,0 +1,8 @@
+{
+  "dependencies": [
+    {
+      "id": "com.elysium.rules.pathfinder1e.core",
+      "minVersion": "0.1.0"
+    }
+  ]
+}

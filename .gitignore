@@ -1,0 +1,56 @@
+# Unity generated folders
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+MemoryCaptures/
+
+# Unity generated files
+sysinfo.txt
+*.pidb
+*.suo
+*.user
+*.userprefs
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# SQLite transient sidecars
+*.db-shm
+*.db-wal
+*.db-journal
+
+# Addressables generated content
+ServerData/
+
+# Visual Studio / Rider
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.unityproj
+*.sln
+*.slnx
+*.tmp
+*.dotCover
+
+# OS clutter
+.DS_Store
+Thumbs.db
+
+# Package caches (keep manifest and lock)
+Packages/packages-lock.json.meta
+
+# Crash reports
+sysinfo.txt
+
+# Keep meta files for source assets except generated dirs above

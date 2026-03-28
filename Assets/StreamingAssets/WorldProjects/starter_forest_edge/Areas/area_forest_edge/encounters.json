@@ -1,0 +1,14 @@
+{
+  "encounters": [
+    {
+      "id": "enc_bandit_01",
+      "displayName": "Roadside Bandits",
+      "triggerId": "trigger_bandit_ambush",
+      "npcs": [
+        "npc_bandit_leader",
+        "npc_bandit_01",
+        "npc_bandit_02"
+      ]
+    }
+  ]
+}

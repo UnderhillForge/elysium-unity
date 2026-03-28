@@ -1,0 +1,8 @@
+{
+  "packs": [
+    {
+      "id": "com.elysium.rules.pathfinder1e.core",
+      "version": "0.1.0"
+    }
+  ]
+}

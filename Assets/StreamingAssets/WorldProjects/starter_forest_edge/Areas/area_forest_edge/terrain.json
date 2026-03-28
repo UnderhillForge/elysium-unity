@@ -1,0 +1,19 @@
+{
+  "heightmap": {
+    "resolution": 129,
+    "source": "inline-flat"
+  },
+  "layers": [
+    {
+      "id": "grass",
+      "weight": 0.8
+    },
+    {
+      "id": "dirt",
+      "weight": 0.2
+    }
+  ],
+  "walkability": {
+    "source": "generated"
+  }
+}

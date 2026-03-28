@@ -1,0 +1,16 @@
+{
+  "triggers": [
+    {
+      "id": "trigger_bandit_ambush",
+      "kind": "Sphere",
+      "position": {
+        "x": 10.0,
+        "y": 0.0,
+        "z": 12.0
+      },
+      "radius": 5.0,
+      "onEnterLua": "Scripts/triggers/ambush_on_enter.lua",
+      "enabled": true
+    }
+  ]
+}
