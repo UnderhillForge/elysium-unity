@@ -22,6 +22,10 @@ namespace Elysium.Networking
         /// Empty when the player has no active combatant.
         public string AssignedCombatantId = string.Empty;
 
+        /// The character ID this player selected from the world character gallery.
+        /// Empty when no character has been selected yet.
+        public string AssignedCharacterId = string.Empty;
+
         /// UTC epoch milliseconds when the player joined the session.
         public long JoinedAtUtc;
 
@@ -30,9 +34,10 @@ namespace Elysium.Networking
 
         public bool IsGM => Role == PlayerRole.GameMaster;
         public bool HasCombatant => !string.IsNullOrEmpty(AssignedCombatantId);
+        public bool HasCharacter => !string.IsNullOrEmpty(AssignedCharacterId);
 
         public override string ToString() =>
-            $"[{Role}] {DisplayName} ({PlayerId}) client={NetworkClientId} combatant={AssignedCombatantId}";
+            $"[{Role}] {DisplayName} ({PlayerId}) client={NetworkClientId} character={AssignedCharacterId} combatant={AssignedCombatantId}";
     }
 
     public enum PlayerRole

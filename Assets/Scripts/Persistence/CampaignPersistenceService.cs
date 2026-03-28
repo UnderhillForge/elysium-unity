@@ -313,6 +313,7 @@ CREATE TABLE IF NOT EXISTS session_players (
     network_client_id INTEGER NOT NULL,
     role INTEGER NOT NULL,
     assigned_combatant_id TEXT,
+    assigned_character_id TEXT,
     joined_at_utc INTEGER NOT NULL,
     is_connected INTEGER NOT NULL,
     updated_utc TEXT NOT NULL,
@@ -360,6 +361,30 @@ CREATE TABLE IF NOT EXISTS encounter_actions (
     PRIMARY KEY (encounter_instance_id, action_id)
 );";
             command.ExecuteNonQuery();
+
+            EnsureColumnExists(connection, "session_players", "assigned_character_id", "TEXT");
+        }
+
+        private static void EnsureColumnExists(
+            IDbConnection connection,
+            string tableName,
+            string columnName,
+            string columnDefinition)
+        {
+            using var command = connection.CreateCommand();
+            command.CommandText = $"PRAGMA table_info({tableName});";
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                if (string.Equals(reader.GetString(1), columnName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return;
+                }
+            }
+
+            using var alter = connection.CreateCommand();
+            alter.CommandText = $"ALTER TABLE {tableName} ADD COLUMN {columnName} {columnDefinition};";
+            alter.ExecuteNonQuery();
         }
 
         private static void SaveNormalizedSession(IDbConnection connection, SessionPersistenceSnapshot snapshot)
@@ -394,14 +419,15 @@ CREATE TABLE IF NOT EXISTS encounter_actions (
                 using var insertPlayer = connection.CreateCommand();
                 insertPlayer.Transaction = transaction;
                 insertPlayer.CommandText =
-                    "INSERT OR REPLACE INTO session_players(session_id, player_id, display_name, network_client_id, role, assigned_combatant_id, joined_at_utc, is_connected, updated_utc) " +
-                    "VALUES(@sessionId, @playerId, @displayName, @networkClientId, @role, @assignedCombatantId, @joinedAtUtc, @isConnected, @updatedUtc);";
+                    "INSERT OR REPLACE INTO session_players(session_id, player_id, display_name, network_client_id, role, assigned_combatant_id, assigned_character_id, joined_at_utc, is_connected, updated_utc) " +
+                    "VALUES(@sessionId, @playerId, @displayName, @networkClientId, @role, @assignedCombatantId, @assignedCharacterId, @joinedAtUtc, @isConnected, @updatedUtc);";
                 AddParameter(insertPlayer, "@sessionId", snapshot.SessionId);
                 AddParameter(insertPlayer, "@playerId", player.PlayerId);
                 AddParameter(insertPlayer, "@displayName", player.DisplayName);
                 AddParameter(insertPlayer, "@networkClientId", (long)player.NetworkClientId);
                 AddParameter(insertPlayer, "@role", (int)player.Role);
                 AddParameter(insertPlayer, "@assignedCombatantId", player.AssignedCombatantId);
+                AddParameter(insertPlayer, "@assignedCharacterId", player.AssignedCharacterId);
                 AddParameter(insertPlayer, "@joinedAtUtc", player.JoinedAtUtc);
                 AddParameter(insertPlayer, "@isConnected", player.IsConnected ? 1 : 0);
                 AddParameter(insertPlayer, "@updatedUtc", GetUtcNowIso8601());
@@ -432,7 +458,7 @@ CREATE TABLE IF NOT EXISTS encounter_actions (
 
             using var playersCommand = connection.CreateCommand();
             playersCommand.CommandText =
-                "SELECT player_id, display_name, network_client_id, role, assigned_combatant_id, joined_at_utc, is_connected " +
+                "SELECT player_id, display_name, network_client_id, role, assigned_combatant_id, assigned_character_id, joined_at_utc, is_connected " +
                 "FROM session_players WHERE session_id = @sessionId ORDER BY joined_at_utc ASC;";
             AddParameter(playersCommand, "@sessionId", snapshot.SessionId);
             using var playerReader = playersCommand.ExecuteReader();
@@ -445,8 +471,9 @@ CREATE TABLE IF NOT EXISTS encounter_actions (
                     NetworkClientId = Convert.ToUInt64(playerReader.GetInt64(2)),
                     Role = (PlayerRole)playerReader.GetInt32(3),
                     AssignedCombatantId = playerReader.IsDBNull(4) ? string.Empty : playerReader.GetString(4),
-                    JoinedAtUtc = playerReader.GetInt64(5),
-                    IsConnected = playerReader.GetInt32(6) != 0,
+                    AssignedCharacterId = playerReader.IsDBNull(5) ? string.Empty : playerReader.GetString(5),
+                    JoinedAtUtc = playerReader.GetInt64(6),
+                    IsConnected = playerReader.GetInt32(7) != 0,
                 });
             }
 

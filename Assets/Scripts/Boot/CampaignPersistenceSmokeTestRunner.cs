@@ -203,6 +203,7 @@ namespace Elysium.Boot
                     || e.NetworkClientId != a.NetworkClientId
                     || e.Role != a.Role
                     || !string.Equals(e.AssignedCombatantId, a.AssignedCombatantId, StringComparison.Ordinal)
+                    || !string.Equals(e.AssignedCharacterId, a.AssignedCharacterId, StringComparison.Ordinal)
                     || e.JoinedAtUtc != a.JoinedAtUtc
                     || e.IsConnected != a.IsConnected)
                 {

@@ -1,0 +1,52 @@
+{
+  "characters": [
+    {
+      "Id": "pc_ranger_001",
+      "DisplayName": "Lysa Thornpath",
+      "Ruleset": "Pathfinder1e",
+      "Level": 1,
+      "AbilityStrength": 12,
+      "AbilityDexterity": 16,
+      "AbilityConstitution": 12,
+      "AbilityIntelligence": 10,
+      "AbilityWisdom": 14,
+      "AbilityCharisma": 8,
+      "HitPointsMax": 11,
+      "HitPointsCurrent": 11,
+      "ArmorClass": 15,
+      "ArmorClassTouch": 13,
+      "ArmorClassFlatFooted": 12,
+      "BaseAttackBonus": 1,
+      "CriticalThreatRange": 20,
+      "CriticalMultiplier": 2,
+      "SaveFortitude": 3,
+      "SaveReflex": 4,
+      "SaveWill": 2,
+      "ExperiencePoints": 0
+    },
+    {
+      "Id": "pc_cleric_001",
+      "DisplayName": "Brother Halden",
+      "Ruleset": "Pathfinder1e",
+      "Level": 1,
+      "AbilityStrength": 14,
+      "AbilityDexterity": 10,
+      "AbilityConstitution": 13,
+      "AbilityIntelligence": 10,
+      "AbilityWisdom": 16,
+      "AbilityCharisma": 12,
+      "HitPointsMax": 10,
+      "HitPointsCurrent": 10,
+      "ArmorClass": 17,
+      "ArmorClassTouch": 10,
+      "ArmorClassFlatFooted": 17,
+      "BaseAttackBonus": 0,
+      "CriticalThreatRange": 20,
+      "CriticalMultiplier": 2,
+      "SaveFortitude": 4,
+      "SaveReflex": 0,
+      "SaveWill": 5,
+      "ExperiencePoints": 0
+    }
+  ]
+}

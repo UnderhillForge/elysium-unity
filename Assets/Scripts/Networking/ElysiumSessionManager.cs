@@ -115,6 +115,18 @@ namespace Elysium.Networking
             return sessionService.TryAssignCombatant(gmPlayerId, targetPlayerId, combatantId, out error);
         }
 
+        /// Assign a character selection to a player (GM only).
+        public bool AssignCharacter(string gmPlayerId, string targetPlayerId, string characterId, out string error)
+        {
+            if (!IsServer)
+            {
+                error = "Only the host can assign characters.";
+                return false;
+            }
+
+            return sessionService.TryAssignCharacter(gmPlayerId, targetPlayerId, characterId, out error);
+        }
+
         /// Start a hosted encounter (GM only, session must be in Lobby state).
         public bool StartEncounter(string gmPlayerId, CombatStateService combatState, out string error)
         {

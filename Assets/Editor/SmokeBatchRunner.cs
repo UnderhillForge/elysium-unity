@@ -24,6 +24,7 @@ namespace Elysium.Editor
                 Run<WorldOwnershipSmokeTestRunner>(root, r => r.RunOwnershipSmokeTest(), "WorldOwnership", log);
                 Run<DedicatedServerSmokeTestRunner>(root, r => r.RunDedicatedServerSmokeTest(), "DedicatedServer", log);
                 Run<AreaLifecycleSmokeTestRunner>(root, r => r.RunAreaLifecycleSmokeTest(), "AreaLifecycle", log);
+                Run<CharacterGallerySmokeTestRunner>(root, r => r.RunCharacterGallerySmokeTest(), "CharacterGallery", log);
 
                 Debug.Log(log.ToString());
             }

@@ -188,6 +188,40 @@ namespace Elysium.Networking
             return true;
         }
 
+        /// Assign a lobby character selection to a player (GM authority only).
+        public bool TryAssignCharacter(
+            string requesterId,
+            string targetPlayerId,
+            string characterId,
+            out string error)
+        {
+            if (!IsGMOrHost(requesterId))
+            {
+                error = $"Requester '{requesterId}' is not authorised to assign characters.";
+                return false;
+            }
+
+            if (!players.TryGetValue(targetPlayerId, out var record))
+            {
+                error = $"Player '{targetPlayerId}' not found.";
+                return false;
+            }
+
+            if (!string.IsNullOrEmpty(characterId))
+            {
+                var owner = GetCharacterOwner(characterId);
+                if (owner != null && !string.Equals(owner.PlayerId, targetPlayerId, StringComparison.Ordinal))
+                {
+                    error = $"Character '{characterId}' is already assigned to '{owner.PlayerId}'.";
+                    return false;
+                }
+            }
+
+            record.AssignedCharacterId = characterId ?? string.Empty;
+            error = string.Empty;
+            return true;
+        }
+
         /// Resolve the combatant owner for a given combatant ID.
         /// Returns null if no player is assigned to that combatant.
         public PlayerSessionRecord GetCombatantOwner(string combatantId)
@@ -200,6 +234,26 @@ namespace Elysium.Networking
             foreach (var player in players.Values)
             {
                 if (string.Equals(player.AssignedCombatantId, combatantId, StringComparison.Ordinal))
+                {
+                    return player;
+                }
+            }
+
+            return null;
+        }
+
+        /// Resolve the character owner for a given selected character ID.
+        /// Returns null if no player is assigned to that character.
+        public PlayerSessionRecord GetCharacterOwner(string characterId)
+        {
+            if (string.IsNullOrEmpty(characterId))
+            {
+                return null;
+            }
+
+            foreach (var player in players.Values)
+            {
+                if (string.Equals(player.AssignedCharacterId, characterId, StringComparison.Ordinal))
                 {
                     return player;
                 }
@@ -302,6 +356,7 @@ namespace Elysium.Networking
             }
 
             var assignedCombatants = new HashSet<string>(StringComparer.Ordinal);
+            var assignedCharacters = new HashSet<string>(StringComparer.Ordinal);
 
             for (var i = 0; i < snapshot.Players.Count; i++)
             {
@@ -317,6 +372,18 @@ namespace Elysium.Networking
                         else
                         {
                             assignedCombatants.Add(player.AssignedCombatantId);
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(player.AssignedCharacterId))
+                    {
+                        if (assignedCharacters.Contains(player.AssignedCharacterId))
+                        {
+                            player.AssignedCharacterId = string.Empty;
+                        }
+                        else
+                        {
+                            assignedCharacters.Add(player.AssignedCharacterId);
                         }
                     }
 
