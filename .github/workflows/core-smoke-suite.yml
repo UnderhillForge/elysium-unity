@@ -2,12 +2,24 @@ name: Core Smoke Suite
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - Assets/**
+      - Packages/**
+      - ProjectSettings/**
+      - .github/workflows/core-smoke-suite.yml
   pull_request:
     paths:
       - Assets/**
       - Packages/**
       - ProjectSettings/**
       - .github/workflows/core-smoke-suite.yml
+
+concurrency:
+  group: core-smoke-suite-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   core-smoke-suite:
@@ -55,11 +67,54 @@ jobs:
         run: |
           set -euo pipefail
 
-          grep -q "\[Session\] PASS" "$GITHUB_WORKSPACE/core-smoke.log"
-          grep -q "\[Combat\] PASS" "$GITHUB_WORKSPACE/core-smoke.log"
-          grep -q "\[LuaContextBindings\] PASS" "$GITHUB_WORKSPACE/core-smoke.log"
-          grep -q "\[Persistence\] PASS" "$GITHUB_WORKSPACE/core-smoke.log"
-          grep -q "MoonSharp path: active" "$GITHUB_WORKSPACE/core-smoke.log"
+          REQUIRED_MARKERS=(
+            "[Session] PASS"
+            "[Combat] PASS"
+            "[LuaContextBindings] PASS"
+            "[Persistence] PASS"
+            "[PackagingPortability] PASS"
+            "MoonSharp path: active"
+          )
+
+          missing=0
+          for marker in "${REQUIRED_MARKERS[@]}"; do
+            if grep -Fq "$marker" "$GITHUB_WORKSPACE/core-smoke.log"; then
+              echo "PASS marker found: $marker"
+            else
+              echo "Missing required marker: $marker"
+              missing=1
+            fi
+          done
+
+          if [[ "$missing" -ne 0 ]]; then
+            exit 1
+          fi
+
+      - name: Publish smoke summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Core Smoke Summary"
+            echo ""
+            if [[ -f "$GITHUB_WORKSPACE/core-smoke.log" ]]; then
+              echo "### Required markers"
+              for marker in "[Session] PASS" "[Combat] PASS" "[LuaContextBindings] PASS" "[Persistence] PASS" "[PackagingPortability] PASS" "MoonSharp path: active"; do
+                if grep -Fq "$marker" "$GITHUB_WORKSPACE/core-smoke.log"; then
+                  echo "- PASS: $marker"
+                else
+                  echo "- MISSING: $marker"
+                fi
+              done
+              echo ""
+              echo "### Log tail"
+              echo '```text'
+              tail -n 120 "$GITHUB_WORKSPACE/core-smoke.log"
+              echo '```'
+            else
+              echo "core-smoke.log was not produced."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload smoke log
         if: always()
@@ -67,3 +122,5 @@ jobs:
         with:
           name: core-smoke-log
           path: core-smoke.log
+          if-no-files-found: error
+          retention-days: 14

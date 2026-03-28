@@ -65,7 +65,22 @@ Core runtime coverage is gated by a Unity batch smoke suite entrypoint (`Elysium
 - `[Combat] PASS`
 - `[LuaContextBindings] PASS`
 - `[Persistence] PASS`
+- `[PackagingPortability] PASS`
 - `MoonSharp path: active`
+
+CI workflow path: `.github/workflows/core-smoke-suite.yml`
+
+Local parity command:
+
+`"/Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/Contents/MacOS/Unity" -batchmode -nographics -quit -projectPath "$PWD" -executeMethod Elysium.Editor.SmokeBatchRunner.RunCoreSmokeSuite -logFile -`
+
+For stable local execution when terminal output is interrupted, run the same command in a background terminal and await completion.
+
+Release gate policy for `main`:
+
+- The GitHub branch protection rule for `main` must require the status check named `Run Unity Core Smoke Suite`.
+- Pull requests are not mergeable unless that check is green.
+- CI uploads `core-smoke.log` on both success and failure and publishes a per-run step summary with required marker status.
 
 ## Initial Folder Ownership
 
@@ -118,6 +133,7 @@ Deliver one end-to-end host-authoritative gameplay path that covers session, Lua
 	- `[Combat] PASS`
 	- `[LuaContextBindings] PASS`
 	- `[Persistence] PASS`
+	- `[PackagingPortability] PASS`
 	- `MoonSharp path: active`
 
 ### Acceptance Criteria
