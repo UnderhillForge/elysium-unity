@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using Elysium.Characters;
 using Elysium.Combat;
 using UnityEngine;
@@ -41,7 +40,7 @@ namespace Elysium.World.Lua
                 return moonSharpResult;
             }
 
-            result.Error = "MoonSharp runtime is required but unavailable. Ensure MoonSharp.Interpreter is present in the project.";
+            result.Error = BuildMoonSharpUnavailableError();
             return result;
         }
 
@@ -109,7 +108,8 @@ namespace Elysium.World.Lua
                     {
                         Success = false,
                         UsedMoonSharp = true,
-                        Error = "MoonSharp: DoString method not found (incompatible version).",
+                        Error = "MoonSharp: DoString method not found (incompatible version). "
+                            + $"Available instance methods: {DescribeMethodSignatures(scriptType, "DoString")}",
                     };
                     return true;
                 }
@@ -138,7 +138,9 @@ namespace Elysium.World.Lua
                     {
                         Success = false,
                         UsedMoonSharp = true,
-                        Error = $"MoonSharp: failed to execute DoString overloads. Root error: {root?.Message ?? "unknown"}",
+                        Error = "MoonSharp: failed to execute DoString overloads. "
+                            + $"Tried signatures: {DescribeMethods(doStringMethods)}. "
+                            + $"Root error: {root?.Message ?? "unknown"}",
                     };
                     return true;
                 }
@@ -201,7 +203,8 @@ namespace Elysium.World.Lua
                     {
                         Success = false,
                         UsedMoonSharp = true,
-                        Error = "MoonSharp: Call method not found (incompatible version).",
+                        Error = "MoonSharp: Call method not found (incompatible version). "
+                            + $"Available instance methods: {DescribeMethodSignatures(scriptType, "Call")}",
                     };
                     return true;
                 }
@@ -236,12 +239,13 @@ namespace Elysium.World.Lua
                     {
                         Success = false,
                         UsedMoonSharp = true,
-                        Error = "MoonSharp: could not resolve function from globals (incompatible version).",
+                        Error = "MoonSharp: could not resolve function from globals (incompatible version). "
+                            + $"Missing API for function '{functionName}'.",
                     };
                     return true;
                 }
 
-                if (functionObject == null || (functionObject is string && functionObject.ToString() == "nil"))
+                if (functionObject is string && functionObject.ToString() == "nil")
                 {
                     result = new LuaExecutionResult
                     {
@@ -285,10 +289,59 @@ namespace Elysium.World.Lua
                 {
                     Success = false,
                     UsedMoonSharp = true,
-                    Error = $"MoonSharp execution failed: {root?.Message ?? ex.Message}",
+                    Error = "MoonSharp execution failed: "
+                        + $"{root?.Message ?? ex.Message} "
+                        + $"(function='{functionName}')",
                 };
                 return true;
             }
+        }
+
+        private static string BuildMoonSharpUnavailableError()
+        {
+            var loadedMoonSharpAssemblies = AppDomain.CurrentDomain.GetAssemblies()
+                .Select(a => a.GetName().Name)
+                .Where(n => !string.IsNullOrEmpty(n) && n.IndexOf("MoonSharp", StringComparison.OrdinalIgnoreCase) >= 0)
+                .Distinct(StringComparer.Ordinal)
+                .ToArray();
+
+            var loadedText = loadedMoonSharpAssemblies.Length == 0
+                ? "none"
+                : string.Join(", ", loadedMoonSharpAssemblies);
+
+            return "MoonSharp runtime is required but unavailable. "
+                + "Ensure MoonSharp.Interpreter is present in the project. "
+                + $"Loaded MoonSharp assemblies: {loadedText}.";
+        }
+
+        private static string DescribeMethodSignatures(Type type, string methodName)
+        {
+            if (type == null || string.IsNullOrEmpty(methodName))
+            {
+                return "none";
+            }
+
+            var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(m => string.Equals(m.Name, methodName, StringComparison.Ordinal))
+                .ToArray();
+
+            return DescribeMethods(methods);
+        }
+
+        private static string DescribeMethods(IReadOnlyList<MethodInfo> methods)
+        {
+            if (methods == null || methods.Count == 0)
+            {
+                return "none";
+            }
+
+            var signatures = new List<string>(methods.Count);
+            for (var i = 0; i < methods.Count; i++)
+            {
+                signatures.Add(methods[i].ToString());
+            }
+
+            return string.Join(" | ", signatures);
         }
 
         private static void RegisterMoonSharpTypes()
@@ -420,59 +473,6 @@ namespace Elysium.World.Lua
             }
 
             return current;
-        }
-
-        private static LuaExecutionResult ExecuteFallback(
-            string scriptSource,
-            string functionName,
-            LuaHostContext context,
-            LuaExecutionActor actor)
-        {
-            var result = new LuaExecutionResult
-            {
-                Success = true,
-                UsedMoonSharp = false,
-            };
-
-            var source = scriptSource ?? string.Empty;
-            var fnName = functionName?.Trim();
-            if (string.IsNullOrWhiteSpace(fnName))
-            {
-                result.Error = "Lua function name is empty.";
-                result.Success = false;
-                return result;
-            }
-
-            // Minimal support for current scaffold behavior.
-            if (string.Equals(fnName, "on_enter", StringComparison.Ordinal)
-                || string.Equals(fnName, "on_world_loaded", StringComparison.Ordinal)
-                || string.Equals(fnName, "on_combat_started", StringComparison.Ordinal)
-                || string.Equals(fnName, "on_interact", StringComparison.Ordinal)
-                || string.Equals(fnName, "on_spawned", StringComparison.Ordinal))
-            {
-                var encounterMatch = Regex.Match(source, "context\\s*:\\s*start_encounter\\(\\s*\"([^\"]+)\"\\s*\\)");
-                if (encounterMatch.Success)
-                {
-                    context.start_encounter(encounterMatch.Groups[1].Value);
-                }
-
-                var logMatch = Regex.Match(source, "context\\s*:\\s*log\\(\\s*\"([^\"]*)\"\\s*\\)");
-                if (logMatch.Success)
-                {
-                    context.log(logMatch.Groups[1].Value);
-                }
-
-                if (!encounterMatch.Success && !logMatch.Success)
-                {
-                    context.log($"Fallback Lua executed function '{fnName}' for actor '{actor?.Name ?? "Unknown"}'.");
-                }
-
-                return result;
-            }
-
-            result.Success = false;
-            result.Error = $"Fallback runtime does not support function: {fnName}";
-            return result;
         }
     }
 }
