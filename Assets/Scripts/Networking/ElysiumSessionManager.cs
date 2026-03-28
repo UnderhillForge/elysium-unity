@@ -16,6 +16,7 @@ namespace Elysium.Networking
         // Authoritative state — host only.
         private readonly SessionService sessionService = new SessionService();
         private CombatNetworkService combatNetworkService;
+        private ExplorationSyncService explorationSyncService;
 
         // Replicated session info — broadcast to all clients.
         private readonly NetworkVariable<FixedString512Bytes> sessionInfoJson =
@@ -26,6 +27,7 @@ namespace Elysium.Networking
 
         public event Action<SessionInfo> SessionInfoUpdated;
         public event Action<CombatNetworkSnapshot> CombatSnapshotUpdated;
+        public event Action<ExplorationNetworkSnapshot> ExplorationSnapshotUpdated;
 
         // Host-side authoritative session access.
         public SessionService Session => sessionService;
@@ -37,6 +39,9 @@ namespace Elysium.Networking
         // Latest combat snapshot — server: from service; clients: from replicated variable.
         private CombatNetworkSnapshot cachedCombatSnapshot;
         public CombatNetworkSnapshot CurrentCombatSnapshot => cachedCombatSnapshot;
+
+        private ExplorationNetworkSnapshot cachedExplorationSnapshot;
+        public ExplorationNetworkSnapshot CurrentExplorationSnapshot => cachedExplorationSnapshot;
 
         public override void OnNetworkSpawn()
         {
@@ -53,6 +58,8 @@ namespace Elysium.Networking
             {
                 combatNetworkService = new CombatNetworkService();
                 combatNetworkService.SnapshotPublished += HandleCombatSnapshot;
+                explorationSyncService = new ExplorationSyncService();
+                explorationSyncService.SnapshotPublished += HandleExplorationSnapshot;
                 NetworkManager.Singleton.OnClientConnectedCallback += HandleClientConnected;
                 NetworkManager.Singleton.OnClientDisconnectCallback += HandleClientDisconnected;
             }
@@ -66,6 +73,11 @@ namespace Elysium.Networking
             {
                 NetworkManager.Singleton.OnClientConnectedCallback -= HandleClientConnected;
                 NetworkManager.Singleton.OnClientDisconnectCallback -= HandleClientDisconnected;
+            }
+
+            if (explorationSyncService != null)
+            {
+                explorationSyncService.SnapshotPublished -= HandleExplorationSnapshot;
             }
 
             base.OnNetworkDespawn();
@@ -88,6 +100,7 @@ namespace Elysium.Networking
             }
 
             PublishSessionInfo();
+            explorationSyncService?.HostArea(worldProjectId, "Exploration session opened.");
             return true;
         }
 
@@ -125,6 +138,34 @@ namespace Elysium.Networking
             }
 
             return sessionService.TryAssignCharacter(gmPlayerId, targetPlayerId, characterId, out error);
+        }
+
+        /// Submit exploration movement for a player (host-authoritative).
+        public bool SubmitExplorationMovement(
+            string requesterId,
+            string areaId,
+            Vector3 position,
+            float facingYaw,
+            out string error)
+        {
+            if (!IsServer)
+            {
+                error = "Only the host can accept exploration movement updates.";
+                return false;
+            }
+
+            if (explorationSyncService == null)
+            {
+                explorationSyncService = new ExplorationSyncService();
+                explorationSyncService.SnapshotPublished += HandleExplorationSnapshot;
+            }
+
+            if (string.IsNullOrWhiteSpace(explorationSyncService.ActiveAreaId))
+            {
+                explorationSyncService.HostArea(areaId, "Exploration area hosted.");
+            }
+
+            return explorationSyncService.TryUpdateMovement(sessionService, requesterId, areaId, position, facingYaw, out error);
         }
 
         /// Start a hosted encounter (GM only, session must be in Lobby state).
@@ -340,6 +381,12 @@ namespace Elysium.Networking
         {
             cachedCombatSnapshot = snapshot;
             CombatSnapshotUpdated?.Invoke(snapshot);
+        }
+
+        private void HandleExplorationSnapshot(ExplorationNetworkSnapshot snapshot)
+        {
+            cachedExplorationSnapshot = snapshot;
+            ExplorationSnapshotUpdated?.Invoke(snapshot);
         }
 
         private void HandleSessionInfoChanged(
