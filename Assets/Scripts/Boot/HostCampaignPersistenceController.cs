@@ -18,6 +18,8 @@ namespace Elysium.Boot
         [SerializeField] private bool autoSaveOnApplicationPause = true;
         [SerializeField] private bool autoSaveOnApplicationQuit = true;
         [SerializeField] private bool runWorldSimulationTickOnAutoSave = true;
+        [SerializeField] private bool runWorldSimulationTickOnInterval = true;
+        [SerializeField, Min(1f)] private float worldSimulationTickIntervalSeconds = 45f;
         [SerializeField] private string encounterInstanceId = "active_host_encounter";
         [SerializeField] private string fallbackAreaId = "area_forest_edge_01";
         [SerializeField] private bool verboseLogging = true;
@@ -26,6 +28,7 @@ namespace Elysium.Boot
         private bool isRestoring;
         private string cachedCampaignDatabasePath = string.Empty;
         private WorldSimulationTickService worldSimulationTickService;
+        private float nextWorldSimulationTickAt;
 
         private void Reset()
         {
@@ -58,6 +61,28 @@ namespace Elysium.Boot
             {
                 TryRestoreOnStartup();
             }
+
+            ScheduleNextWorldSimulationTick();
+        }
+
+        private void Update()
+        {
+            if (!runWorldSimulationTickOnInterval
+                || isRestoring
+                || sessionManager == null
+                || !sessionManager.IsSpawned
+                || !sessionManager.IsServer)
+            {
+                return;
+            }
+
+            if (Time.unscaledTime < nextWorldSimulationTickAt)
+            {
+                return;
+            }
+
+            TryAdvanceWorldSimulationTick("interval");
+            ScheduleNextWorldSimulationTick();
         }
 
         private void OnDisable()
@@ -203,7 +228,9 @@ namespace Elysium.Boot
 
         private void EnsureWorldSimulationService()
         {
-            if (!runWorldSimulationTickOnAutoSave || worldSimulationTickService != null || string.IsNullOrEmpty(cachedCampaignDatabasePath))
+            if ((!runWorldSimulationTickOnAutoSave && !runWorldSimulationTickOnInterval)
+                || worldSimulationTickService != null
+                || string.IsNullOrEmpty(cachedCampaignDatabasePath))
             {
                 return;
             }
@@ -213,7 +240,8 @@ namespace Elysium.Boot
 
         private void TryAdvanceWorldSimulationTick(string reason)
         {
-            if (!runWorldSimulationTickOnAutoSave || sessionManager == null)
+            var shouldRun = reason == "interval" ? runWorldSimulationTickOnInterval : runWorldSimulationTickOnAutoSave;
+            if (!shouldRun || sessionManager == null)
             {
                 return;
             }
@@ -246,6 +274,12 @@ namespace Elysium.Boot
                 Debug.Log(
                     $"[Elysium] World simulation tick #{tickSnapshot.TickCount} ({tickSnapshot.LastEvent}) in area '{tickSnapshot.LastAreaId}' ({reason}).");
             }
+        }
+
+        private void ScheduleNextWorldSimulationTick()
+        {
+            var interval = Mathf.Max(1f, worldSimulationTickIntervalSeconds);
+            nextWorldSimulationTickAt = Time.unscaledTime + interval;
         }
         }
     }
