@@ -28,6 +28,7 @@ namespace Elysium.Editor
                 Run<CharacterCreationSmokeTestRunner>(root, r => r.RunCharacterCreationSmokeTest(), "CharacterCreation", log);
                 Run<ExplorationSyncSmokeTestRunner>(root, r => r.RunExplorationSyncSmokeTest(), "ExplorationSync", log);
                 Run<WorldMutationSmokeTestRunner>(root, r => r.RunWorldMutationSmokeTest(), "WorldMutation", log);
+                Run<WorldSimulationTickSmokeTestRunner>(root, r => r.RunWorldSimulationTickSmokeTest(), "WorldSimulationTick", log);
 
                 Debug.Log(log.ToString());
             }

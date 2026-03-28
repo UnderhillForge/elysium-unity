@@ -2,6 +2,7 @@ using System.Collections;
 using System.IO;
 using Elysium.Networking;
 using Elysium.Packaging;
+using Elysium.World;
 using UnityEngine;
 
 namespace Elysium.Boot
@@ -16,6 +17,7 @@ namespace Elysium.Boot
         [SerializeField] private bool autoSaveOnCombatChange = true;
         [SerializeField] private bool autoSaveOnApplicationPause = true;
         [SerializeField] private bool autoSaveOnApplicationQuit = true;
+        [SerializeField] private bool runWorldSimulationTickOnAutoSave = true;
         [SerializeField] private string encounterInstanceId = "active_host_encounter";
         [SerializeField] private string fallbackAreaId = "area_forest_edge_01";
         [SerializeField] private bool verboseLogging = true;
@@ -23,6 +25,7 @@ namespace Elysium.Boot
         private bool hasSubscribed;
         private bool isRestoring;
         private string cachedCampaignDatabasePath = string.Empty;
+        private WorldSimulationTickService worldSimulationTickService;
 
         private void Reset()
         {
@@ -48,6 +51,7 @@ namespace Elysium.Boot
             }
 
             cachedCampaignDatabasePath = ResolveCampaignDatabasePath();
+            EnsureWorldSimulationService();
             SubscribeIfNeeded();
 
             if (autoLoadOnHostStart)
@@ -151,12 +155,15 @@ namespace Elysium.Boot
             if (string.IsNullOrEmpty(cachedCampaignDatabasePath))
             {
                 cachedCampaignDatabasePath = ResolveCampaignDatabasePath();
+                EnsureWorldSimulationService();
             }
 
             if (string.IsNullOrEmpty(cachedCampaignDatabasePath))
             {
                 return;
             }
+
+            TryAdvanceWorldSimulationTick(reason);
 
             if (!sessionManager.TrySaveCampaignState(cachedCampaignDatabasePath, encounterInstanceId, fallbackAreaId, out var error))
             {
@@ -192,6 +199,53 @@ namespace Elysium.Boot
             }
 
                 return string.Empty;
+        }
+
+        private void EnsureWorldSimulationService()
+        {
+            if (!runWorldSimulationTickOnAutoSave || worldSimulationTickService != null || string.IsNullOrEmpty(cachedCampaignDatabasePath))
+            {
+                return;
             }
+
+            worldSimulationTickService = new WorldSimulationTickService(cachedCampaignDatabasePath);
+        }
+
+        private void TryAdvanceWorldSimulationTick(string reason)
+        {
+            if (!runWorldSimulationTickOnAutoSave || sessionManager == null)
+            {
+                return;
+            }
+
+            EnsureWorldSimulationService();
+            if (worldSimulationTickService == null)
+            {
+                return;
+            }
+
+            var activeAreaId = fallbackAreaId;
+            var exploration = sessionManager.CurrentExplorationSnapshot;
+            if (exploration != null && !string.IsNullOrWhiteSpace(exploration.AreaId))
+            {
+                activeAreaId = exploration.AreaId;
+            }
+
+            if (!worldSimulationTickService.TryAdvanceTick(sessionManager.Session.State, activeAreaId, out var tickSnapshot, out var error))
+            {
+                if (verboseLogging)
+                {
+                    Debug.LogWarning($"[Elysium] World simulation tick failed ({reason}): {error}");
+                }
+
+                return;
+            }
+
+            if (verboseLogging && tickSnapshot.Advanced)
+            {
+                Debug.Log(
+                    $"[Elysium] World simulation tick #{tickSnapshot.TickCount} ({tickSnapshot.LastEvent}) in area '{tickSnapshot.LastAreaId}' ({reason}).");
+            }
+        }
         }
     }
