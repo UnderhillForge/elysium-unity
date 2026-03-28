@@ -18,6 +18,8 @@ namespace Elysium.World.Lua
         public Func<LuaSessionStateSnapshot> SessionStateProvider;
         public Func<string, LuaPlayerBindingSnapshot> CombatantOwnerProvider;
         public Func<string, LuaPlayerBindingSnapshot> PlayerProvider;
+        public Func<string, string> WorldStateReader;
+        public Func<string, string, string> WorldStateWriter;
 
         public void log(string message)
         {
@@ -180,6 +182,28 @@ namespace Elysium.World.Lua
         {
             return get_player_binding(playerId).RoleName;
         }
+
+        public string get_player_character_id(string playerId)
+        {
+            return get_player_binding(playerId).AssignedCharacterId;
+        }
+
+        public string get_world_state(string key)
+        {
+            return WorldStateReader?.Invoke(key) ?? string.Empty;
+        }
+
+        public bool set_world_state(string key, string value)
+        {
+            var error = WorldStateWriter?.Invoke(key, value) ?? "World state writer not available.";
+            if (!string.IsNullOrEmpty(error))
+            {
+                log($"ERROR: {error}");
+                return false;
+            }
+
+            return true;
+        }
     }
 
     [Serializable]
@@ -212,6 +236,7 @@ namespace Elysium.World.Lua
         public string PlayerId = string.Empty;
         public string DisplayName = string.Empty;
         public string RoleName = string.Empty;
+        public string AssignedCharacterId = string.Empty;
         public string AssignedCombatantId = string.Empty;
         public bool IsConnected;
         public bool IsGM;

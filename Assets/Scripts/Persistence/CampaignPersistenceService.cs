@@ -13,6 +13,7 @@ namespace Elysium.Persistence
     public sealed class CampaignPersistenceService
     {
         private const string SessionSnapshotKey = "session.active_snapshot_json";
+        private const string WorldStateScope = "world";
         private readonly string databasePath;
 
         public CampaignPersistenceService(string campaignDatabasePath)
@@ -243,6 +244,55 @@ namespace Elysium.Persistence
             return TryLoadEncounterState(encounterInstanceId, out combatState, out error);
         }
 
+        public bool TrySetWorldState(string key, string value, out string error)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                error = "World state key is empty.";
+                return false;
+            }
+
+            return TryExecute(connection =>
+            {
+                EnsureNormalizedSchema(connection);
+                using var command = connection.CreateCommand();
+                command.CommandText =
+                    "INSERT OR REPLACE INTO world_state_kv(scope, state_key, state_value, updated_utc) VALUES(@scope, @key, @value, @updatedUtc);";
+                AddParameter(command, "@scope", WorldStateScope);
+                AddParameter(command, "@key", key);
+                AddParameter(command, "@value", value ?? string.Empty);
+                AddParameter(command, "@updatedUtc", GetUtcNowIso8601());
+                command.ExecuteNonQuery();
+            }, out error);
+        }
+
+        public bool TryGetWorldState(string key, out string value, out string error)
+        {
+            value = string.Empty;
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                error = "World state key is empty.";
+                return false;
+            }
+
+            string loadedValue = null;
+            if (!TryExecute(connection =>
+            {
+                EnsureNormalizedSchema(connection);
+                using var command = connection.CreateCommand();
+                command.CommandText = "SELECT state_value FROM world_state_kv WHERE scope = @scope AND state_key = @key LIMIT 1;";
+                AddParameter(command, "@scope", WorldStateScope);
+                AddParameter(command, "@key", key);
+                loadedValue = command.ExecuteScalar() as string;
+            }, out error))
+            {
+                return false;
+            }
+
+            value = loadedValue ?? string.Empty;
+            return true;
+        }
+
         private bool TryExecute(Action<IDbConnection> operation, out string error)
         {
             if (operation == null)
@@ -363,6 +413,47 @@ CREATE TABLE IF NOT EXISTS encounter_actions (
             command.ExecuteNonQuery();
 
             EnsureColumnExists(connection, "session_players", "assigned_character_id", "TEXT");
+            EnsureWorldStateSchema(connection);
+        }
+
+        private static void EnsureWorldStateSchema(IDbConnection connection)
+        {
+            if (!TableExists(connection, "world_state_kv"))
+            {
+                using var create = connection.CreateCommand();
+                create.CommandText = @"
+CREATE TABLE world_state_kv (
+    scope TEXT NOT NULL,
+    state_key TEXT NOT NULL,
+    state_value TEXT NOT NULL,
+    updated_utc TEXT NOT NULL,
+    PRIMARY KEY (scope, state_key)
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_world_state_kv_scope_key ON world_state_kv(scope, state_key);";
+                create.ExecuteNonQuery();
+                return;
+            }
+
+            EnsureColumnExists(connection, "world_state_kv", "scope", "TEXT NOT NULL DEFAULT 'world'");
+
+            using (var backfill = connection.CreateCommand())
+            {
+                backfill.CommandText = "UPDATE world_state_kv SET scope = @scope WHERE scope IS NULL OR scope = '';";
+                AddParameter(backfill, "@scope", WorldStateScope);
+                backfill.ExecuteNonQuery();
+            }
+
+            using var index = connection.CreateCommand();
+            index.CommandText = "CREATE UNIQUE INDEX IF NOT EXISTS idx_world_state_kv_scope_key ON world_state_kv(scope, state_key);";
+            index.ExecuteNonQuery();
+        }
+
+        private static bool TableExists(IDbConnection connection, string tableName)
+        {
+            using var command = connection.CreateCommand();
+            command.CommandText = "SELECT COUNT(1) FROM sqlite_master WHERE type = 'table' AND name = @tableName;";
+            AddParameter(command, "@tableName", tableName);
+            return Convert.ToInt32(command.ExecuteScalar()) > 0;
         }
 
         private static void EnsureColumnExists(
