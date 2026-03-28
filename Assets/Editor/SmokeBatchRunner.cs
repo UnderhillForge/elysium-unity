@@ -20,6 +20,7 @@ namespace Elysium.Editor
                 Run<CombatSmokeTestRunner>(root, r => r.RunCombatSmokeTest(), "Combat", log);
                 Run<LuaContextBindingsSmokeTestRunner>(root, r => r.RunSmokeTest(), "LuaContextBindings", log);
                 Run<CampaignPersistenceSmokeTestRunner>(root, r => r.RunPersistenceSmokeTest(), "Persistence", log);
+                Run<WorldPackagePortabilitySmokeTestRunner>(root, r => r.RunPortabilitySmokeTest(), "PackagingPortability", log);
 
                 Debug.Log(log.ToString());
             }
