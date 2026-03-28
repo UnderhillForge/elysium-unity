@@ -20,6 +20,9 @@ namespace Elysium.Boot
         [SerializeField] private bool runWorldSimulationTickOnAutoSave = true;
         [SerializeField] private bool runWorldSimulationTickOnInterval = true;
         [SerializeField, Min(1f)] private float worldSimulationTickIntervalSeconds = 45f;
+        [SerializeField, Min(0f)] private float worldSimulationTickIntervalJitterSeconds = 0f;
+        [SerializeField, Min(1)] private int maxWorldSimulationTicksPerUpdate = 1;
+        [SerializeField, Min(0f)] private float nonIntervalWorldSimulationMinSpacingSeconds = 0.25f;
         [SerializeField] private string encounterInstanceId = "active_host_encounter";
         [SerializeField] private string fallbackAreaId = "area_forest_edge_01";
         [SerializeField] private bool verboseLogging = true;
@@ -28,7 +31,9 @@ namespace Elysium.Boot
         private bool isRestoring;
         private string cachedCampaignDatabasePath = string.Empty;
         private WorldSimulationTickService worldSimulationTickService;
-        private float nextWorldSimulationTickAt;
+        private float nextWorldSimulationTickAt = float.PositiveInfinity;
+        private float lastWorldSimulationTickAt = float.NegativeInfinity;
+        private int lastWorldSimulationTickFrame = -1;
 
         private void Reset()
         {
@@ -76,13 +81,22 @@ namespace Elysium.Boot
                 return;
             }
 
-            if (Time.unscaledTime < nextWorldSimulationTickAt)
+            var dueIntervalTicks = ConsumeDueIntervalTickBudget();
+            if (dueIntervalTicks <= 0)
             {
                 return;
             }
 
-            TryAdvanceWorldSimulationTick("interval");
-            ScheduleNextWorldSimulationTick();
+            for (var index = 0; index < dueIntervalTicks; index++)
+            {
+                TryAdvanceWorldSimulationTick("interval");
+            }
+
+            if (verboseLogging && IsStillBehindSimulationSchedule())
+            {
+                Debug.LogWarning(
+                    $"[Elysium] World simulation interval budget capped at {Mathf.Max(1, maxWorldSimulationTicksPerUpdate)} ticks per frame.");
+            }
         }
 
         private void OnDisable()
@@ -246,6 +260,11 @@ namespace Elysium.Boot
                 return;
             }
 
+            if (!CanRunWorldSimulationTick(reason))
+            {
+                return;
+            }
+
             EnsureWorldSimulationService();
             if (worldSimulationTickService == null)
             {
@@ -274,12 +293,79 @@ namespace Elysium.Boot
                 Debug.Log(
                     $"[Elysium] World simulation tick #{tickSnapshot.TickCount} ({tickSnapshot.LastEvent}) in area '{tickSnapshot.LastAreaId}' ({reason}).");
             }
+
+            if (tickSnapshot.Advanced)
+            {
+                RecordAdvancedWorldSimulationTick();
+            }
+        }
+
+        private int ConsumeDueIntervalTickBudget()
+        {
+            if (float.IsPositiveInfinity(nextWorldSimulationTickAt))
+            {
+                ScheduleNextWorldSimulationTick();
+            }
+
+            var dueTicks = 0;
+            var maxTicks = Mathf.Max(1, maxWorldSimulationTicksPerUpdate);
+            var now = Time.unscaledTime;
+            while (now >= nextWorldSimulationTickAt && dueTicks < maxTicks)
+            {
+                dueTicks++;
+                ScheduleNextWorldSimulationTick(nextWorldSimulationTickAt);
+            }
+
+            return dueTicks;
+        }
+
+        private bool IsStillBehindSimulationSchedule()
+        {
+            return !float.IsPositiveInfinity(nextWorldSimulationTickAt) && Time.unscaledTime >= nextWorldSimulationTickAt;
+        }
+
+        private bool CanRunWorldSimulationTick(string reason)
+        {
+            if (Time.frameCount == lastWorldSimulationTickFrame)
+            {
+                return false;
+            }
+
+            if (!string.Equals(reason, "interval")
+                && Time.unscaledTime - lastWorldSimulationTickAt < Mathf.Max(0f, nonIntervalWorldSimulationMinSpacingSeconds))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private void RecordAdvancedWorldSimulationTick()
+        {
+            lastWorldSimulationTickAt = Time.unscaledTime;
+            lastWorldSimulationTickFrame = Time.frameCount;
         }
 
         private void ScheduleNextWorldSimulationTick()
         {
-            var interval = Mathf.Max(1f, worldSimulationTickIntervalSeconds);
-            nextWorldSimulationTickAt = Time.unscaledTime + interval;
+            ScheduleNextWorldSimulationTick(Time.unscaledTime);
         }
+
+        private void ScheduleNextWorldSimulationTick(float startTime)
+        {
+            var interval = Mathf.Max(1f, worldSimulationTickIntervalSeconds);
+            nextWorldSimulationTickAt = startTime + interval + SampleIntervalJitter();
+        }
+
+        private float SampleIntervalJitter()
+        {
+            var jitter = Mathf.Max(0f, worldSimulationTickIntervalJitterSeconds);
+            if (jitter <= 0f)
+            {
+                return 0f;
+            }
+
+            return Random.Range(0f, jitter);
         }
     }
+}

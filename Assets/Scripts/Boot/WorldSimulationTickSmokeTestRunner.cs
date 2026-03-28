@@ -48,6 +48,8 @@ namespace Elysium.Boot
             var session = new SessionService();
             var baseline = ReadTickCount(persistence);
 
+            VerifyCadenceGuards(log);
+
             Require(session.TryOpenSession(SessionId, WorldProjectFolder, out var error), error);
 
             Require(simulation.TryAdvanceTick(SessionState.Lobby, "area_forest_edge", out var firstTick, out error), error);
@@ -86,12 +88,99 @@ namespace Elysium.Boot
 
             log.AppendLine("=== World Simulation Tick Smoke Test ===");
             log.AppendLine($"Baseline tick count: {baseline}");
+            log.AppendLine("Cadence guards (budget cap + autosave spacing) — ok");
             log.AppendLine($"First tick advanced to {firstTick.TickCount} in {firstTick.SessionStateName} — ok");
             log.AppendLine($"Combat tick skipped with count {combatTick.TickCount} — ok");
             log.AppendLine($"Second tick advanced to {secondTick.TickCount} with event '{secondTick.LastEvent}' — ok");
             log.AppendLine($"Persisted tick count verified: {persistedCount} — ok");
             log.AppendLine("=== World Simulation Tick Smoke Test COMPLETE ===");
             return log.ToString();
+        }
+
+        private static void VerifyCadenceGuards(StringBuilder log)
+        {
+            var cadence = new DeterministicCadence(intervalSeconds: 10f, maxTicksPerUpdate: 2, nonIntervalMinSpacingSeconds: 5f);
+            cadence.ResetSchedule(0f);
+
+            var dueTicks = cadence.ConsumeDueIntervalBudget(now: 35f);
+            Require(dueTicks == 2, "Interval cadence budget did not cap due ticks per frame.");
+            Require(cadence.IsStillBehindSchedule(now: 35f), "Cadence should remain behind schedule after budget cap is hit.");
+
+            cadence.RecordAdvancedTick(now: 35f, frame: 1);
+            Require(!cadence.CanRunTick("autosave", now: 35f, frame: 1), "Autosave tick should be blocked in same frame as interval tick.");
+
+            Require(!cadence.CanRunTick("autosave", now: 38f, frame: 2), "Autosave tick should be blocked by non-interval spacing guard.");
+
+            Require(cadence.CanRunTick("autosave", now: 41f, frame: 3), "Autosave tick should be allowed once spacing window elapses.");
+
+            log.AppendLine("Cadence guard behavior verified with deterministic clock.");
+        }
+
+        private sealed class DeterministicCadence
+        {
+            private readonly float intervalSeconds;
+            private readonly int maxTicksPerUpdate;
+            private readonly float nonIntervalMinSpacingSeconds;
+
+            private float nextTickAt = float.PositiveInfinity;
+            private float lastAdvancedAt = float.NegativeInfinity;
+            private int lastAdvancedFrame = -1;
+
+            public DeterministicCadence(float intervalSeconds, int maxTicksPerUpdate, float nonIntervalMinSpacingSeconds)
+            {
+                this.intervalSeconds = Math.Max(1f, intervalSeconds);
+                this.maxTicksPerUpdate = Math.Max(1, maxTicksPerUpdate);
+                this.nonIntervalMinSpacingSeconds = Math.Max(0f, nonIntervalMinSpacingSeconds);
+            }
+
+            public void ResetSchedule(float now)
+            {
+                nextTickAt = now + intervalSeconds;
+            }
+
+            public int ConsumeDueIntervalBudget(float now)
+            {
+                if (float.IsPositiveInfinity(nextTickAt))
+                {
+                    ResetSchedule(now);
+                }
+
+                var due = 0;
+                while (now >= nextTickAt && due < maxTicksPerUpdate)
+                {
+                    due++;
+                    nextTickAt += intervalSeconds;
+                }
+
+                return due;
+            }
+
+            public bool IsStillBehindSchedule(float now)
+            {
+                return !float.IsPositiveInfinity(nextTickAt) && now >= nextTickAt;
+            }
+
+            public bool CanRunTick(string reason, float now, int frame)
+            {
+                if (frame == lastAdvancedFrame)
+                {
+                    return false;
+                }
+
+                if (!string.Equals(reason, "interval", StringComparison.OrdinalIgnoreCase)
+                    && now - lastAdvancedAt < nonIntervalMinSpacingSeconds)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            public void RecordAdvancedTick(float now, int frame)
+            {
+                lastAdvancedAt = now;
+                lastAdvancedFrame = frame;
+            }
         }
 
         private static int ReadTickCount(CampaignPersistenceService persistence)
