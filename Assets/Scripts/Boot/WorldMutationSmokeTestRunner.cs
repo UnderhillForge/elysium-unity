@@ -59,6 +59,13 @@ namespace Elysium.Boot
                 AllowDebugLog = true,
             };
 
+            var readDeniedPolicy = new LuaSandboxPolicy
+            {
+                AllowWorldRead = false,
+                AllowWorldWrite = true,
+                AllowDebugLog = true,
+            };
+
             var key = $"smoke.world.flag.{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}";
 
             Require(service.TryWriteState(OwnerPlayerId, key, "enabled", writePolicy, out var error), error);
@@ -85,12 +92,33 @@ namespace Elysium.Boot
             }
             log.AppendLine($"Policy-denied mutation rejected: {deniedError} — ok");
 
+            var readDenied = !service.TryReadState(key, readDeniedPolicy, out _, out var readDeniedError);
+            if (!readDenied)
+            {
+                throw new InvalidOperationException("Policy-denied world read should be rejected.");
+            }
+            log.AppendLine($"Policy-denied read rejected: {readDeniedError} — ok");
+
+            var unauthorizedRead = !service.TryReadState(StrangerPlayerId, key, writePolicy, enforceOwnership: true, out _, out var unauthorizedReadError);
+            if (!unauthorizedRead)
+            {
+                throw new InvalidOperationException("Ownership-enforced world read should reject non-owner requester.");
+            }
+            log.AppendLine($"Ownership-enforced read rejected: {unauthorizedReadError} — ok");
+
+            var invalidKeyRejected = !service.TryWriteState(OwnerPlayerId, "invalid key with spaces", "x", writePolicy, out var invalidKeyError);
+            if (!invalidKeyRejected)
+            {
+                throw new InvalidOperationException("Invalid world key should be rejected.");
+            }
+            log.AppendLine($"Invalid key rejected: {invalidKeyError} — ok");
+
             var context = new LuaHostContext
             {
                 LogSink = message => runtimeLog.Add(message),
                 WorldStateReader = stateKey =>
                 {
-                    return service.TryReadState(stateKey, writePolicy, out var value, out var readError)
+                    return service.TryReadState(OwnerPlayerId, stateKey, writePolicy, enforceOwnership: true, out var value, out var readError)
                         ? value
                         : $"read_error:{readError}";
                 },

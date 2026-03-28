@@ -1,6 +1,7 @@
 using Elysium.Packaging;
 using Elysium.Persistence;
 using Elysium.World.Lua;
+using System;
 
 namespace Elysium.World
 {
@@ -18,6 +19,17 @@ namespace Elysium.World
 
         public bool TryReadState(string key, LuaSandboxPolicy policy, out string value, out string error)
         {
+            return TryReadState(requesterPlayerId: string.Empty, key, policy, enforceOwnership: false, out value, out error);
+        }
+
+        public bool TryReadState(
+            string requesterPlayerId,
+            string key,
+            LuaSandboxPolicy policy,
+            bool enforceOwnership,
+            out string value,
+            out string error)
+        {
             value = string.Empty;
 
             if (policy == null)
@@ -29,6 +41,17 @@ namespace Elysium.World
             if (!policy.AllowWorldRead)
             {
                 error = "Lua capability denied by policy: world.read";
+                return false;
+            }
+
+            if (!TryValidateKey(key, out error))
+            {
+                return false;
+            }
+
+            if (enforceOwnership
+                && !WorldProjectLoader.TryLoadFromStreamingAssets(worldProjectFolder, requesterPlayerId, out _, out error))
+            {
                 return false;
             }
 
@@ -49,12 +72,61 @@ namespace Elysium.World
                 return false;
             }
 
+            if (!TryValidateKey(key, out error))
+            {
+                return false;
+            }
+
             if (!WorldProjectLoader.TryLoadFromStreamingAssets(worldProjectFolder, requesterPlayerId, out _, out error))
             {
                 return false;
             }
 
             return persistence.TrySetWorldState(key, value, out error);
+        }
+
+        private static bool TryValidateKey(string key, out string error)
+        {
+            error = string.Empty;
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                error = "World state key is empty.";
+                return false;
+            }
+
+            var trimmed = key.Trim();
+            if (trimmed.Length < 3 || trimmed.Length > 128)
+            {
+                error = "World state key length must be between 3 and 128 characters.";
+                return false;
+            }
+
+            if (trimmed.StartsWith(".", StringComparison.Ordinal)
+                || trimmed.EndsWith(".", StringComparison.Ordinal)
+                || trimmed.Contains("..", StringComparison.Ordinal)
+                || !trimmed.Contains(".", StringComparison.Ordinal))
+            {
+                error = "World state key must be namespaced (for example: system.weather.state).";
+                return false;
+            }
+
+            for (var i = 0; i < trimmed.Length; i++)
+            {
+                var c = trimmed[i];
+                var valid = (c >= 'a' && c <= 'z')
+                    || (c >= 'A' && c <= 'Z')
+                    || (c >= '0' && c <= '9')
+                    || c == '.'
+                    || c == '_'
+                    || c == '-';
+                if (!valid)
+                {
+                    error = "World state key contains invalid characters. Allowed: a-z, A-Z, 0-9, '.', '_' and '-'.";
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

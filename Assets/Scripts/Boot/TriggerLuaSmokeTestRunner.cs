@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Elysium.World;
 using Elysium.World.Lua;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ namespace Elysium.Boot
         [SerializeField] private string areaId = "area_forest_edge";
         [SerializeField] private string triggerId = "trigger_bandit_ambush";
         [SerializeField] private string actorName = "SmokeTester";
+        [SerializeField] private string requestingPlayerId = "gm.elysium.default";
         [SerializeField] private bool runOnStart;
 
         [Header("Policy")]
@@ -83,6 +85,8 @@ namespace Elysium.Boot
             var projectRoot = Path.Combine(Application.streamingAssetsPath, "WorldProjects", worldProjectFolder);
             var scriptReference = LuaMetadataParser.ParseScriptReference(projectRoot, selected.onEnterLua);
             var scriptPath = Path.Combine(projectRoot, selected.onEnterLua.Replace('/', Path.DirectorySeparatorChar));
+            var campaignDatabasePath = Path.Combine(projectRoot, "Databases", "campaign.db");
+            var worldMutation = new WorldMutationService(worldProjectFolder, campaignDatabasePath);
 
             var context = new LuaHostContext
             {
@@ -92,6 +96,18 @@ namespace Elysium.Boot
                     LastEncounterId = encounterId;
                     Debug.Log($"[Elysium] Encounter requested by Lua: {encounterId}");
                 },
+                WorldStateReader = key =>
+                {
+                    return worldMutation.TryReadState(requestingPlayerId, key, policy, enforceOwnership: true, out var value, out var readError)
+                        ? value
+                        : $"read_error:{readError}";
+                },
+                WorldStateWriter = (key, value) =>
+                {
+                    return worldMutation.TryWriteState(requestingPlayerId, key, value, policy, out var writeError)
+                        ? string.Empty
+                        : writeError;
+                }
             };
 
             var actor = new LuaExecutionActor { Name = actorName };
