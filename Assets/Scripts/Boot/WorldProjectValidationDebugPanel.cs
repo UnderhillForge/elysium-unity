@@ -1,9 +1,14 @@
+using System.IO;
+using Elysium.Packaging;
+using Elysium.Persistence;
+using Elysium.World;
 using UnityEngine;
 
 namespace Elysium.Boot
 {
     public sealed class WorldProjectValidationDebugPanel : MonoBehaviour
     {
+        [SerializeField] private ElysiumBootstrap bootstrap;
         [SerializeField] private WorldProjectValidationRunner runner;
         [SerializeField] private WorldPackageRunner packageRunner;
         [SerializeField] private TriggerLuaSmokeTestRunner triggerSmokeRunner;
@@ -13,6 +18,8 @@ namespace Elysium.Boot
         [SerializeField] private CombatNetworkingSmokeTestRunner networkingSmokeRunner;
         [SerializeField] private SessionSmokeTestRunner sessionSmokeRunner;
         [SerializeField] private CampaignPersistenceSmokeTestRunner persistenceSmokeRunner;
+        [SerializeField] private WorldSimulationTickSmokeTestRunner worldSimulationTickSmokeRunner;
+        [SerializeField] private string simulationWorldProjectId = "starter_forest_edge";
         [SerializeField] private bool showPanel = true;
         [SerializeField] private bool showWhenNotPlaying = false;
         [SerializeField] private Rect panelRect = new Rect(16f, 16f, 520f, 950f);
@@ -23,11 +30,19 @@ namespace Elysium.Boot
         [SerializeField] private bool showNetworkingControls = true;
         [SerializeField] private bool showSessionControls = true;
         [SerializeField] private bool showPersistenceControls = true;
+        [SerializeField] private bool showWorldSimulationControls = true;
 
         private Vector2 detailsScroll;
+        private string worldSimulationRefreshSummary = "Not refreshed";
+        private int worldSimulationTickCount = -1;
+        private string worldSimulationLastUtc = string.Empty;
+        private string worldSimulationLastArea = string.Empty;
+        private string worldSimulationLastEvent = string.Empty;
+        private string worldSimulationLastSessionState = string.Empty;
 
         private void Reset()
         {
+            bootstrap = GetComponent<ElysiumBootstrap>();
             runner = GetComponent<WorldProjectValidationRunner>();
             packageRunner = GetComponent<WorldPackageRunner>();
             triggerSmokeRunner = GetComponent<TriggerLuaSmokeTestRunner>();
@@ -37,6 +52,7 @@ namespace Elysium.Boot
             networkingSmokeRunner = GetComponent<CombatNetworkingSmokeTestRunner>();
             sessionSmokeRunner = GetComponent<SessionSmokeTestRunner>();
             persistenceSmokeRunner = GetComponent<CampaignPersistenceSmokeTestRunner>();
+            worldSimulationTickSmokeRunner = GetComponent<WorldSimulationTickSmokeTestRunner>();
         }
 
         private void OnGUI()
@@ -258,6 +274,43 @@ namespace Elysium.Boot
                 GUILayout.Label(persistenceSmokeRunner.LastSummary);
             }
 
+            if (showWorldSimulationControls)
+            {
+                GUILayout.Space(6f);
+                GUILayout.Label("World Simulation Tick");
+
+                GUILayout.BeginHorizontal();
+                if (worldSimulationTickSmokeRunner != null
+                    && GUILayout.Button("Run Simulation Smoke", GUILayout.Height(26f)))
+                {
+                    worldSimulationTickSmokeRunner.RunWorldSimulationTickSmokeTest();
+                    RefreshWorldSimulationSnapshot();
+                }
+
+                if (GUILayout.Button("Refresh Simulation Snapshot", GUILayout.Height(26f)))
+                {
+                    RefreshWorldSimulationSnapshot();
+                }
+
+                GUILayout.EndHorizontal();
+
+                if (worldSimulationTickSmokeRunner != null)
+                {
+                    var simulationPrevious = GUI.color;
+                    GUI.color = worldSimulationTickSmokeRunner.LastSuccess ? Color.green : new Color(1f, 0.35f, 0.35f);
+                    GUILayout.Label($"Simulation Smoke: {(worldSimulationTickSmokeRunner.LastSuccess ? "Passed" : "Not Passed")}");
+                    GUI.color = simulationPrevious;
+                    GUILayout.Label(worldSimulationTickSmokeRunner.LastSummary);
+                }
+
+                GUILayout.Label($"Snapshot Refresh: {worldSimulationRefreshSummary}");
+                GUILayout.Label($"Tick Count: {(worldSimulationTickCount >= 0 ? worldSimulationTickCount.ToString() : "Unavailable")}");
+                GUILayout.Label($"Last Tick UTC: {(string.IsNullOrEmpty(worldSimulationLastUtc) ? "Unavailable" : worldSimulationLastUtc)}");
+                GUILayout.Label($"Last Area: {(string.IsNullOrEmpty(worldSimulationLastArea) ? "Unavailable" : worldSimulationLastArea)}");
+                GUILayout.Label($"Last Event: {(string.IsNullOrEmpty(worldSimulationLastEvent) ? "Unavailable" : worldSimulationLastEvent)}");
+                GUILayout.Label($"Last Session State: {(string.IsNullOrEmpty(worldSimulationLastSessionState) ? "Unavailable" : worldSimulationLastSessionState)}");
+            }
+
             GUILayout.Space(8f);
             GUILayout.Label("Details");
 
@@ -367,6 +420,67 @@ namespace Elysium.Boot
             GUILayout.Label($"Round-Trip Smoke Test: {status}");
             GUI.color = previous;
             GUILayout.Label(runnerValue.LastRoundTripSummary);
+        }
+
+        private void RefreshWorldSimulationSnapshot()
+        {
+            worldSimulationTickCount = -1;
+            worldSimulationLastUtc = string.Empty;
+            worldSimulationLastArea = string.Empty;
+            worldSimulationLastEvent = string.Empty;
+            worldSimulationLastSessionState = string.Empty;
+
+            var campaignDatabasePath = ResolveCampaignDatabasePath();
+            if (string.IsNullOrEmpty(campaignDatabasePath))
+            {
+                worldSimulationRefreshSummary = "Failed: could not resolve campaign.db path.";
+                return;
+            }
+
+            var persistence = new CampaignPersistenceService(campaignDatabasePath);
+
+            if (!persistence.TryGetWorldState(WorldSimulationTickService.TickCountKey, out var tickText, out var error))
+            {
+                worldSimulationRefreshSummary = $"Failed: {error}";
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(tickText) && int.TryParse(tickText, out var parsedTick) && parsedTick >= 0)
+            {
+                worldSimulationTickCount = parsedTick;
+            }
+
+            if (!persistence.TryGetWorldState(WorldSimulationTickService.LastTickUtcKey, out worldSimulationLastUtc, out error)
+                || !persistence.TryGetWorldState(WorldSimulationTickService.LastAreaIdKey, out worldSimulationLastArea, out error)
+                || !persistence.TryGetWorldState(WorldSimulationTickService.LastEventKey, out worldSimulationLastEvent, out error)
+                || !persistence.TryGetWorldState(WorldSimulationTickService.LastSessionStateKey, out worldSimulationLastSessionState, out error))
+            {
+                worldSimulationRefreshSummary = $"Failed: {error}";
+                return;
+            }
+
+            worldSimulationRefreshSummary = "Updated";
+        }
+
+        private string ResolveCampaignDatabasePath()
+        {
+            var worldProjectId = simulationWorldProjectId;
+            if (bootstrap != null && !string.IsNullOrWhiteSpace(bootstrap.DefaultWorldProjectId))
+            {
+                worldProjectId = bootstrap.DefaultWorldProjectId;
+            }
+
+            if (string.IsNullOrWhiteSpace(worldProjectId))
+            {
+                return string.Empty;
+            }
+
+            if (!WorldProjectLoader.TryLoadFromStreamingAssets(worldProjectId, out var project, out _))
+            {
+                return string.Empty;
+            }
+
+            return Path.Combine(project.RootPath, project.Definition.CampaignDatabasePath);
         }
     }
 }
