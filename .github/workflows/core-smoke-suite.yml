@@ -1,0 +1,69 @@
+name: Core Smoke Suite
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - Assets/**
+      - Packages/**
+      - ProjectSettings/**
+      - .github/workflows/core-smoke-suite.yml
+
+jobs:
+  core-smoke-suite:
+    name: Run Unity Core Smoke Suite
+    runs-on: [self-hosted, macOS]
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve Unity binary
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          UNITY_BIN="${UNITY_PATH:-}"
+          if [[ -z "$UNITY_BIN" ]]; then
+            UNITY_BIN="/Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/Contents/MacOS/Unity"
+          fi
+
+          if [[ ! -x "$UNITY_BIN" ]]; then
+            echo "Unity executable not found or not executable at: $UNITY_BIN"
+            echo "Set UNITY_PATH on the runner if Unity is installed elsewhere."
+            exit 1
+          fi
+
+          echo "UNITY_BIN=$UNITY_BIN" >> "$GITHUB_ENV"
+
+      - name: Run batch smoke suite
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          "$UNITY_BIN" \
+            -batchmode \
+            -nographics \
+            -quit \
+            -projectPath "$GITHUB_WORKSPACE" \
+            -executeMethod Elysium.Editor.SmokeBatchRunner.RunCoreSmokeSuite \
+            -logFile "$GITHUB_WORKSPACE/core-smoke.log"
+
+      - name: Validate smoke markers
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          grep -q "\[Session\] PASS" "$GITHUB_WORKSPACE/core-smoke.log"
+          grep -q "\[Combat\] PASS" "$GITHUB_WORKSPACE/core-smoke.log"
+          grep -q "\[LuaContextBindings\] PASS" "$GITHUB_WORKSPACE/core-smoke.log"
+          grep -q "\[Persistence\] PASS" "$GITHUB_WORKSPACE/core-smoke.log"
+          grep -q "MoonSharp path: active" "$GITHUB_WORKSPACE/core-smoke.log"
+
+      - name: Upload smoke log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-smoke-log
+          path: core-smoke.log
