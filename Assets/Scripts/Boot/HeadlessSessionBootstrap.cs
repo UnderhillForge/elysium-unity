@@ -1,5 +1,6 @@
 using Elysium.Networking;
 using Elysium.Packaging;
+using Elysium.World;
 using UnityEngine;
 
 namespace Elysium.Boot
@@ -12,20 +13,27 @@ namespace Elysium.Boot
     ///   1. Start the transport (StartServer).
     ///   2. Load the configured world project via WorldProjectLoader.
     ///   3. Open the session on SessionService.
-    ///   4. Publish ready state.
+    ///   4. Activate the entry area via AreaLifecycleService (if provided).
+    ///   5. Publish ready state.
     public sealed class HeadlessSessionBootstrap
     {
         private readonly INetworkTransport transport;
         private readonly SessionService sessionService;
+        private readonly AreaLifecycleService areaLifecycle;
 
         public bool IsReady { get; private set; }
         public string LastError { get; private set; } = string.Empty;
         public SessionService Session => sessionService;
+        public AreaLifecycleService AreaLifecycle => areaLifecycle;
 
-        public HeadlessSessionBootstrap(INetworkTransport transport, SessionService sessionService)
+        public HeadlessSessionBootstrap(
+            INetworkTransport transport,
+            SessionService sessionService,
+            AreaLifecycleService areaLifecycle = null)
         {
             this.transport = transport ?? throw new System.ArgumentNullException(nameof(transport));
             this.sessionService = sessionService ?? throw new System.ArgumentNullException(nameof(sessionService));
+            this.areaLifecycle = areaLifecycle;
         }
 
         /// Run the full boot sequence. Returns true on success.
@@ -57,17 +65,31 @@ namespace Elysium.Boot
                 return false;
             }
 
+            // Step 4 — Activate entry area (optional; skipped when no area lifecycle service is provided).
+            if (areaLifecycle != null)
+            {
+                if (!areaLifecycle.TryActivateEntryArea(worldProject, out error))
+                {
+                    sessionService.CloseSession();
+                    transport.Stop();
+                    LastError = $"Entry area activation failed: {error}";
+                    return false;
+                }
+            }
+
             IsReady = true;
             error = string.Empty;
 
             Debug.Log($"[HeadlessSessionBootstrap] Ready. Session={sessionId}, " +
                       $"World={worldProject.Definition.ProjectId}, " +
+                      $"Area={areaLifecycle?.ActiveAreaId ?? "none"}, " +
                       $"Topology={transport.Topology}");
             return true;
         }
 
         public void Shutdown()
         {
+            areaLifecycle?.DeactivateArea();
             transport.Stop();
             IsReady = false;
         }

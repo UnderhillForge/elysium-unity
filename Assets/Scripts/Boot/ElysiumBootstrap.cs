@@ -1,4 +1,5 @@
 using Elysium.Networking;
+using Elysium.World;
 using UnityEngine;
 
 namespace Elysium.Boot
@@ -33,14 +34,16 @@ namespace Elysium.Boot
         public bool BootDedicatedServer(
             string sessionId = null,
             string worldProjectFolder = null,
-            INetworkTransport transport = null)
+            INetworkTransport transport = null,
+            AreaLifecycleService areaLifecycle = null)
         {
             var resolvedSessionId = sessionId ?? defaultSessionId;
             var resolvedFolder = worldProjectFolder ?? defaultWorldProjectId;
             var resolvedTransport = transport ?? new HeadlessNetworkTransport();
+            var resolvedAreaLifecycle = areaLifecycle ?? new AreaLifecycleService();
 
             var sessionService = new SessionService();
-            var bootstrap = new HeadlessSessionBootstrap(resolvedTransport, sessionService);
+            var bootstrap = new HeadlessSessionBootstrap(resolvedTransport, sessionService, resolvedAreaLifecycle);
 
             if (!bootstrap.Boot(resolvedSessionId, resolvedFolder, out var error))
             {
