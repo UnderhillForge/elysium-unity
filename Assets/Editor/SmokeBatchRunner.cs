@@ -22,6 +22,7 @@ namespace Elysium.Editor
                 Run<CampaignPersistenceSmokeTestRunner>(root, r => r.RunPersistenceSmokeTest(), "Persistence", log);
                 Run<WorldPackagePortabilitySmokeTestRunner>(root, r => r.RunPortabilitySmokeTest(), "PackagingPortability", log);
                 Run<WorldOwnershipSmokeTestRunner>(root, r => r.RunOwnershipSmokeTest(), "WorldOwnership", log);
+                Run<DedicatedServerSmokeTestRunner>(root, r => r.RunDedicatedServerSmokeTest(), "DedicatedServer", log);
 
                 Debug.Log(log.ToString());
             }
