@@ -18,6 +18,18 @@ namespace Elysium.Packaging
             return TryLoadFromPath(projectPath, out worldProject, out error);
         }
 
+        /// Ownership-enforced overload. Denies edit access if requestingPlayerId is not the
+        /// owner or a collaborator on the loaded project.
+        public static bool TryLoadFromStreamingAssets(
+            string projectFolderName,
+            string requestingPlayerId,
+            out WorldProject worldProject,
+            out string error)
+        {
+            var projectPath = Path.Combine(Application.streamingAssetsPath, WorldProjectsRoot, projectFolderName);
+            return TryLoadFromPath(projectPath, requestingPlayerId, out worldProject, out error);
+        }
+
         public static bool TryLoadFromPath(
             string projectRootPath,
             out WorldProject worldProject,
@@ -86,6 +98,27 @@ namespace Elysium.Packaging
             }
 
             worldProject = new WorldProject(projectRootPath, definition);
+            return true;
+        }
+
+        /// Ownership-enforced overload. Denies access if requestingPlayerId is not the
+        /// owner or a collaborator on the loaded project.
+        public static bool TryLoadFromPath(
+            string projectRootPath,
+            string requestingPlayerId,
+            out WorldProject worldProject,
+            out string error)
+        {
+            if (!TryLoadFromPath(projectRootPath, out worldProject, out error))
+                return false;
+
+            if (!WorldAccessPolicy.CanEdit(worldProject.Definition, requestingPlayerId))
+            {
+                error = WorldAccessPolicy.DenialReason(worldProject.Definition, requestingPlayerId);
+                worldProject = null;
+                return false;
+            }
+
             return true;
         }
     }

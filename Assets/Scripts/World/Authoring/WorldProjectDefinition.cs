@@ -9,6 +9,8 @@ namespace Elysium.World.Authoring
         [SerializeField] private string projectId = string.Empty;
         [SerializeField] private string displayName = string.Empty;
         [SerializeField] private string author = string.Empty;
+        [SerializeField] private string ownerPlayerId = string.Empty;
+        [SerializeField] private string[] collaborators = new string[0];
         [SerializeField] private string ruleset = "Pathfinder1e";
         [SerializeField] private string entryAreaId = string.Empty;
         [SerializeField] private string worldDatabasePath = "Databases/world.db";
@@ -21,6 +23,8 @@ namespace Elysium.World.Authoring
         public string ProjectId => projectId;
         public string DisplayName => displayName;
         public string Author => author;
+        public string OwnerPlayerId => ownerPlayerId;
+        public string[] Collaborators => collaborators;
         public string Ruleset => ruleset;
         public string EntryAreaId => entryAreaId;
         public string WorldDatabasePath => worldDatabasePath;

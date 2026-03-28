@@ -40,12 +40,25 @@ namespace Elysium.Packaging
             var root = worldProject.RootPath;
             var areaId = worldProject.Definition.EntryAreaId;
 
+            ValidateOwnerMetadata(worldProject, result);
             ValidateRequiredProjectFiles(root, result);
             ValidateRequiredAreaFiles(root, areaId, result);
             ValidateDatabases(root, worldProject, packageMode, result);
             ValidateLuaReferences(root, areaId, result);
 
             return result;
+        }
+
+        private static void ValidateOwnerMetadata(WorldProject worldProject, WorldProjectValidationResult result)
+        {
+            var definition = worldProject.Definition;
+
+            if (string.IsNullOrWhiteSpace(definition.OwnerPlayerId))
+            {
+                result.Warnings.Add(
+                    "[Ownership] project.json has no ownerPlayerId. " +
+                    "Ownership will be unenforceable at runtime.");
+            }
         }
 
         private static void ValidateRequiredProjectFiles(string root, WorldProjectValidationResult result)
