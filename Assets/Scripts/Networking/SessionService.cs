@@ -73,6 +73,12 @@ namespace Elysium.Networking
                 return false;
             }
 
+            if (record.IsGM && HasGM)
+            {
+                error = "Session already has a GM. Reassign role before registering another GM.";
+                return false;
+            }
+
             record.JoinedAtUtc = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             record.IsConnected = true;
             players[record.PlayerId] = record;
@@ -121,6 +127,17 @@ namespace Elysium.Networking
                 return false;
             }
 
+            if (newRole == PlayerRole.GameMaster
+                && HasGM
+                && !string.Equals(GMPlayerId, targetPlayerId, StringComparison.Ordinal))
+            {
+                if (players.TryGetValue(GMPlayerId, out var currentGm))
+                {
+                    currentGm.Role = PlayerRole.Player;
+                    PlayerRoleChanged?.Invoke(currentGm);
+                }
+            }
+
             record.Role = newRole;
 
             if (newRole == PlayerRole.GameMaster)
@@ -154,6 +171,16 @@ namespace Elysium.Networking
             {
                 error = $"Player '{targetPlayerId}' not found.";
                 return false;
+            }
+
+            if (!string.IsNullOrEmpty(combatantId))
+            {
+                var owner = GetCombatantOwner(combatantId);
+                if (owner != null && !string.Equals(owner.PlayerId, targetPlayerId, StringComparison.Ordinal))
+                {
+                    error = $"Combatant '{combatantId}' is already assigned to '{owner.PlayerId}'.";
+                    return false;
+                }
             }
 
             record.AssignedCombatantId = combatantId ?? string.Empty;
@@ -267,20 +294,64 @@ namespace Elysium.Networking
             SessionId = snapshot?.SessionId ?? string.Empty;
             WorldProjectId = snapshot?.WorldProjectId ?? string.Empty;
             State = snapshot?.State ?? SessionState.Idle;
-            GMPlayerId = snapshot?.GMPlayerId ?? string.Empty;
+            GMPlayerId = string.Empty;
 
             if (snapshot?.Players == null)
             {
                 return;
             }
 
+            var assignedCombatants = new HashSet<string>(StringComparer.Ordinal);
+
             for (var i = 0; i < snapshot.Players.Count; i++)
             {
                 var player = snapshot.Players[i];
                 if (player != null && !string.IsNullOrEmpty(player.PlayerId))
                 {
+                    if (!string.IsNullOrEmpty(player.AssignedCombatantId))
+                    {
+                        if (assignedCombatants.Contains(player.AssignedCombatantId))
+                        {
+                            player.AssignedCombatantId = string.Empty;
+                        }
+                        else
+                        {
+                            assignedCombatants.Add(player.AssignedCombatantId);
+                        }
+                    }
+
+                    if (player.IsGM)
+                    {
+                        if (string.IsNullOrEmpty(GMPlayerId))
+                        {
+                            GMPlayerId = player.PlayerId;
+                        }
+                        else
+                        {
+                            player.Role = PlayerRole.Player;
+                        }
+                    }
+
                     players[player.PlayerId] = player;
                 }
+            }
+
+            if (!string.IsNullOrEmpty(snapshot.GMPlayerId)
+                && players.TryGetValue(snapshot.GMPlayerId, out var snapshotGm))
+            {
+                if (!snapshotGm.IsGM)
+                {
+                    snapshotGm.Role = PlayerRole.GameMaster;
+                }
+
+                if (!string.IsNullOrEmpty(GMPlayerId)
+                    && !string.Equals(GMPlayerId, snapshot.GMPlayerId, StringComparison.Ordinal)
+                    && players.TryGetValue(GMPlayerId, out var previousGm))
+                {
+                    previousGm.Role = PlayerRole.Player;
+                }
+
+                GMPlayerId = snapshot.GMPlayerId;
             }
         }
 

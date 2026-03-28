@@ -115,6 +115,21 @@ namespace Elysium.Boot
 
             log.AppendLine($"[4] Combatants assigned: Bob→{player1.AssignedCombatantId}, Carol→{player2.AssignedCombatantId}");
 
+            var unauthorizedAssignmentRejected = !session.TryAssignCombatant("player_001", "player_002", "combatant_carol_2", out var assignErr);
+            if (!unauthorizedAssignmentRejected)
+            {
+                throw new InvalidOperationException("Non-GM assignment should be rejected.");
+            }
+
+            var duplicateAssignmentRejected = !session.TryAssignCombatant("gm_001", "player_002", "combatant_bob", out var duplicateErr);
+            if (!duplicateAssignmentRejected)
+            {
+                throw new InvalidOperationException("Duplicate combatant assignment should be rejected.");
+            }
+
+            log.AppendLine($"[4.1] Unauthorized assignment rejected: {unauthorizedAssignmentRejected} ({assignErr})");
+            log.AppendLine($"[4.2] Duplicate assignment rejected: {duplicateAssignmentRejected} ({duplicateErr})");
+
             // ── 5. Verify combatant ownership ────────────────────────────────
             var owner = session.GetCombatantOwner("combatant_bob");
             if (owner == null || owner.PlayerId != "player_001")
@@ -230,6 +245,28 @@ namespace Elysium.Boot
             }
 
             log.AppendLine($"[13] Carol disconnected. IsConnected={player2.IsConnected}");
+
+            // ── 14. Snapshot restore preserves ownership ─────────────────────
+            var snapshot = session.CreateSnapshot();
+            var restored = new SessionService();
+            restored.RestoreFromSnapshot(snapshot);
+
+            if (restored.GMPlayerId != "gm_001")
+            {
+                throw new InvalidOperationException($"Expected restored GM to be 'gm_001', got '{restored.GMPlayerId}'.");
+            }
+
+            if (restored.GetCombatantOwner("combatant_bob")?.PlayerId != "player_001")
+            {
+                throw new InvalidOperationException("Restored ownership for combatant_bob is incorrect.");
+            }
+
+            if (restored.GetCombatantOwner("combatant_carol")?.PlayerId != "player_002")
+            {
+                throw new InvalidOperationException("Restored ownership for combatant_carol is incorrect.");
+            }
+
+            log.AppendLine("[14] Snapshot restore ownership verified.");
             log.AppendLine();
             log.AppendLine("=== All Steps Passed ===");
 
