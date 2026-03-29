@@ -74,6 +74,8 @@ namespace Elysium.Boot
             buffer.AppendLine($"GM: {session?.GMPlayerId ?? "(none)"}");
             buffer.AppendLine($"Area: {area?.ActiveAreaId ?? "(none)"}");
             buffer.AppendLine($"Character: {bootstrap.AssignedCharacterId}");
+            buffer.AppendLine($"Donor Prefab: {bootstrap.DonorPrefabName}");
+            buffer.AppendLine($"Prefab Source: {bootstrap.DonorPrefabAssetPath}");
 
             if (activeCharacter != null)
             {
@@ -91,11 +93,12 @@ namespace Elysium.Boot
                 buffer.AppendLine($"Exploration Participants: {exploration.CurrentSnapshot?.Participants?.Count ?? 0}");
             }
 
+            buffer.AppendLine($"Spawn Status: {bootstrap.SpawnStatus}");
             buffer.AppendLine($"Move Status: {bootstrap.LastMovementStatus}");
             buffer.AppendLine($"Toggle HUD: {toggleKey}");
 
-            GUI.Box(new Rect(12f, 12f, 520f, 220f), buffer.ToString(), panelStyle);
-            GUI.Label(new Rect(24f, 22f, 500f, 200f), buffer.ToString(), labelStyle);
+            GUI.Box(new Rect(12f, 12f, 700f, 280f), buffer.ToString(), panelStyle);
+            GUI.Label(new Rect(24f, 22f, 680f, 260f), buffer.ToString(), labelStyle);
         }
     }
 }

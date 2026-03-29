@@ -34,6 +34,7 @@ namespace Elysium.Boot
 
         [Header("Donor Content")]
         [SerializeField] private GameObject donorCharacterPrefab;
+        [SerializeField] private string donorPrefabReferencePath = string.Empty;
 
         [Header("Runtime Controls")]
         [SerializeField] private float moveSpeed = 4.5f;
@@ -55,6 +56,9 @@ namespace Elysium.Boot
         public GameObject ActiveCharacterInstance => activeCharacterInstance;
         public string AssignedCharacterId => assignedCharacterId;
         public string LastMovementStatus { get; private set; } = "No movement yet.";
+        public string DonorPrefabName => donorCharacterPrefab != null ? donorCharacterPrefab.name : "(none)";
+        public string DonorPrefabAssetPath => string.IsNullOrWhiteSpace(donorPrefabReferencePath) ? "(unknown)" : donorPrefabReferencePath;
+        public string SpawnStatus { get; private set; } = "Not spawned.";
 
         private void Start()
         {
@@ -225,11 +229,13 @@ namespace Elysium.Boot
             if (donorCharacterPrefab == null)
             {
                 Debug.LogWarning("[ProtoPlayableBootstrap] Donor character prefab is not assigned. No runtime avatar spawned.");
+                SpawnStatus = "Spawn failed: donor prefab not assigned.";
                 return;
             }
 
             activeCharacterInstance = Instantiate(donorCharacterPrefab, spawnPosition, Quaternion.identity);
             activeCharacterInstance.name = "ProtoPlayableCharacter";
+            SpawnStatus = $"Spawned '{donorCharacterPrefab.name}' at ({spawnPosition.x:F1}, {spawnPosition.y:F1}, {spawnPosition.z:F1}).";
         }
 
         private static bool TryResolveEntrySpawnPosition(string worldRootPath, string entrySpawnId, out Vector3 position)

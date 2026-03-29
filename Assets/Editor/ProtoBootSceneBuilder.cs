@@ -44,6 +44,7 @@ namespace Elysium.Editor
 
             var bootstrapSerialized = new SerializedObject(bootstrap);
             bootstrapSerialized.FindProperty("donorCharacterPrefab").objectReferenceValue = donorPrefab;
+            bootstrapSerialized.FindProperty("donorPrefabReferencePath").stringValue = DonorPrefabPath;
             bootstrapSerialized.FindProperty("worldProjectFolder").stringValue = "proto_village_square";
             bootstrapSerialized.FindProperty("sessionId").stringValue = "proto_playable_001";
             bootstrapSerialized.FindProperty("localPlayerId").stringValue = "gm_001";
