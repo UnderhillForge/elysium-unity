@@ -8,6 +8,7 @@ namespace Elysium.Editor
     public static class ProtoBootSceneBuilder
     {
         private const string ScenePath = "Assets/Scenes/Proto/ProtoBoot.unity";
+        private const string SourceScenePath = "Assets/RPGPP_LT/Scene/rpgpp_lt_scene_1.0.unity";
         private const string DonorPrefabPath = "Assets/ExplosiveLLC/RPG Character Mecanim Animation Pack FREE/Prefabs/Character/RPG-Character.prefab";
 
         [MenuItem("Elysium/Prototype/Build Proto Boot Scene")]
@@ -21,25 +22,16 @@ namespace Elysium.Editor
             EnsureFolder("Assets/Scenes");
             EnsureFolder("Assets/Scenes/Proto");
 
-            var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            var scene = EditorSceneManager.OpenScene(SourceScenePath, OpenSceneMode.Single);
 
-            var lightObject = new GameObject("Directional Light");
-            var light = lightObject.AddComponent<Light>();
-            light.type = LightType.Directional;
-            light.intensity = 1.1f;
-            lightObject.transform.rotation = Quaternion.Euler(50f, -30f, 0f);
+            // Remove previous bootstrap instances if this builder is run repeatedly.
+            var existingBootstraps = Object.FindObjectsByType<ProtoPlayableBootstrap>();
+            for (var i = 0; i < existingBootstraps.Length; i++)
+            {
+                Object.DestroyImmediate(existingBootstraps[i].gameObject);
+            }
 
-            var ground = GameObject.CreatePrimitive(PrimitiveType.Plane);
-            ground.name = "Ground";
-            ground.transform.position = Vector3.zero;
-            ground.transform.localScale = new Vector3(4f, 1f, 4f);
-
-            var cameraObject = new GameObject("Main Camera");
-            cameraObject.tag = "MainCamera";
-            var camera = cameraObject.AddComponent<Camera>();
-            camera.clearFlags = CameraClearFlags.Skybox;
-            cameraObject.transform.position = new Vector3(0f, 3.25f, -5.5f);
-            cameraObject.transform.rotation = Quaternion.Euler(18f, 0f, 0f);
+            EnsureMainCamera();
 
             var bootstrapObject = new GameObject("ProtoPlayableBootstrap");
             var bootstrap = bootstrapObject.AddComponent<ProtoPlayableBootstrap>();
@@ -65,7 +57,22 @@ namespace Elysium.Editor
             EditorSceneManager.SaveScene(scene, ScenePath);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log($"[ProtoBootSceneBuilder] Scene created: {ScenePath}");
+            Debug.Log($"[ProtoBootSceneBuilder] Scene created from '{SourceScenePath}': {ScenePath}");
+        }
+
+        private static void EnsureMainCamera()
+        {
+            if (Camera.main != null)
+            {
+                return;
+            }
+
+            var cameraObject = new GameObject("Main Camera");
+            cameraObject.tag = "MainCamera";
+            var camera = cameraObject.AddComponent<Camera>();
+            camera.clearFlags = CameraClearFlags.Skybox;
+            cameraObject.transform.position = new Vector3(0f, 3.25f, -5.5f);
+            cameraObject.transform.rotation = Quaternion.Euler(18f, 0f, 0f);
         }
 
         private static void EnsureFolder(string folderPath)
