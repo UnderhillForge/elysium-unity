@@ -58,6 +58,7 @@ namespace Elysium.Editor
                 Run<ProtoCharacterCreationSmokeTestRunner>(root, r => r.RunProtoCharacterCreationSmokeTest(), "ProtoCharacterCreation", log);
                 Run<ProtoInventorySmokeTestRunner>(root, r => r.RunProtoInventorySmokeTest(), "ProtoInventory", log);
                 Run<ProtoAreaSmokeTestRunner>(root, r => r.RunProtoAreaSmokeTest(), "ProtoArea", log);
+                Run<ProtoNetworkParitySmokeTestRunner>(root, r => r.RunProtoNetworkParitySmokeTest(), "ProtoNetworkParity", log);
 
                 Debug.Log(log.ToString());
             }

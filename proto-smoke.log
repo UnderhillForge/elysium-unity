@@ -7,9 +7,9 @@ Darwin version:          25.2.0
 Architecture:            arm64
 Running under Rosetta:   NO
 Available memory:        16384 MB
-Date:                    2026-03-29T03:31:58Z
+Date:                    2026-03-29T03:40:29Z
 [Licensing::Module] Trying to connect to existing licensing client channel...
-[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jws" at "2026-03-29T03:31:58.314083Z"
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jws" at "2026-03-29T03:40:29.297486Z"
 Launching external process: /Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/Contents/Helpers/PackageManager/Server/UnityPackageManager
 
 COMMAND LINE ARGUMENTS:
@@ -62,19 +62,17 @@ Successfully changed project path to: /Volumes/External Drive/unity/elysium_unit
     "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
 Player connection [8652532800]  Target information:
 
-Player connection [8652532800]  * "[IP] 192.168.68.53 [Port] 55504 [Flags] 2 [Guid] 3712416228 [EditorId] 3712416228 [Version] 1048832 [Id] OSXEditor(0,mac.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
+Player connection [8652532800]  * "[IP] 192.168.68.53 [Port] 55504 [Flags] 2 [Guid] 2792391984 [EditorId] 2792391984 [Version] 1048832 [Id] OSXEditor(0,mac.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
 
-Player connection [8652532800]  * "[IP] 192.168.68.68 [Port] 55504 [Flags] 2 [Guid] 3712416228 [EditorId] 3712416228 [Version] 1048832 [Id] OSXEditor(0,mac.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
+Player connection [8652532800]  * "[IP] 192.168.68.68 [Port] 55504 [Flags] 2 [Guid] 2792391984 [EditorId] 2792391984 [Version] 1048832 [Id] OSXEditor(0,mac.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
 
-Player connection [8652532800]  * "[IP] 100.114.232.52 [Port] 55504 [Flags] 2 [Guid] 3712416228 [EditorId] 3712416228 [Version] 1048832 [Id] OSXEditor(0,mac.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
+Player connection [8652532800]  * "[IP] 100.114.232.52 [Port] 55504 [Flags] 2 [Guid] 2792391984 [EditorId] 2792391984 [Version] 1048832 [Id] OSXEditor(0,mac.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
 
 Player connection [8652532800] Host joined multi-casting on [225.0.0.222:54997]...
 Player connection [8652532800] Host joined alternative multi-casting on [225.0.0.222:34997]...
 Input System module state changed to: Initialized.
 [Physics::Module] Initialized fallback backend.
 [Physics::Module] Id: 0xdecafbad
-[Package Manager] Connected to IPC stream "Upm-71092" after 0.2 seconds.
-[Licensing::Module] Licensing is not yet initialized.
 [Licensing::Client] Error: HandshakeResponse reported an error:
 	ResponseCode: 505
 	ResponseStatus: Unsupported protocol version '1.18.1'.
@@ -82,17 +80,19 @@ Input System module state changed to: Initialized.
 [Licensing::IpcConnector] LicenseClient-jws channel disconnected successfully.
 [Licensing::IpcConnector] Channel LicenseClient-jws-6000.4.0 doesn't exist
 Launching external process: /Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/Contents/Helpers/UnityLicensingClient.app/Contents/MacOS/Unity.Licensing.Client
-[Licensing::Module] Successfully launched the LicensingClient (PId: 71094)
-[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jws-6000.4.0" at "2026-03-29T03:31:59.038777Z"
+[Licensing::Module] Successfully launched the LicensingClient (PId: 74295)
+[Package Manager] Connected to IPC stream "Upm-74293" after 0.2 seconds.
+[Licensing::Module] Licensing is not yet initialized.
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jws-6000.4.0" at "2026-03-29T03:40:29.976171Z"
 [Licensing::Client] Handshaking with LicensingClient:
   Version:                 1.18.1+9fbee8e
-  Session Id:              9241235ebfb043be8a56b9527da355e6
-  Correlation Id:          1bbc071b406727d6de1454782a8e1ee8
-  External correlation Id: 4200151679587736351
+  Session Id:              5edd8ebbdcd04d80825f29cf3e457e44
+  Correlation Id:          6155687ca5ff14b66759d9dc43d32a04
+  External correlation Id: 4259109488488617197
   Machine Id:              yoDbc3Pw2SFeowiq40Bz/HG+M10=
-[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-jws-6000.4.0" (connect: 0.38s, validation: 0.04s, handshake: 0.30s)
-[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jws-6000.4.0-notifications" at "2026-03-29T03:31:59.375033Z"
-[Licensing::Module] Connected to LicensingClient (PId: 71094, launch time: 0.00, total connection time: 0.71s)
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-jws-6000.4.0" (connect: 0.38s, validation: 0.03s, handshake: 0.29s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jws-6000.4.0-notifications" at "2026-03-29T03:40:30.29726Z"
+[Licensing::Module] Connected to LicensingClient (PId: 74295, launch time: 0.00, total connection time: 0.70s)
 [Licensing::Module] Error: Access token is unavailable; failed to update
 [Licensing::Client] Successfully resolved entitlement details
 [Licensing::Module] License group:
@@ -102,8 +102,8 @@ Launching external process: /Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/
   Expiration: Unlimited
 [Licensing::Client] Successfully updated license, isAsync: True, time: 0.00
 [Licensing::Client] Successfully resolved entitlement details
-[Licensing::Module] Licensing Background thread has ended after 1.07s
-[Licensing::Module] Licensing is initialized (took 0.79s).
+[Licensing::Module] Licensing Background thread has ended after 1.01s
+[Licensing::Module] Licensing is initialized (took 0.68s).
 [Licensing::Client] Successfully resolved entitlement details
 Library Redirect Path: Library/
 [Physics::Module] Selected backend.
@@ -125,7 +125,7 @@ Initialize mono
 Mono path[0] = '/Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/Contents/Resources/Scripting/Managed'
 Mono path[1] = '/Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/Contents/Resources/Scripting/MonoBleedingEdge/lib/mono/unityjit-macos'
 Mono config path = '/Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/Contents/Resources/Scripting/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56092
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56293
 CodeReloadManager initialized
 Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
 Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
@@ -135,29 +135,29 @@ Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: /Applications/Unity/Hub/Editor/6000.4.0f1/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
 Register platform support module: /Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll
-Registered in 0.001269 seconds.
+Registered in 0.001184 seconds.
 Native extension for OSXStandalone target not found
 Native extension for WebGL target not found
 Package Manager log level set to [2]
 ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.266 seconds
-Domain Reload Profiling: 605ms
-	BeginReloadAssembly (102ms)
-		CreateAndSetChildDomain (15ms)
-	RebuildCommonClasses (34ms)
-	RebuildNativeTypeToScriptingClass (11ms)
-	initialDomainReloadingComplete (36ms)
-	LoadAllAssembliesAndSetupDomain (155ms)
-		LoadAssemblies (87ms)
+- Finished resetting the current domain, in  0.264 seconds
+Domain Reload Profiling: 602ms
+	BeginReloadAssembly (97ms)
+		CreateAndSetChildDomain (12ms)
+	RebuildCommonClasses (33ms)
+	RebuildNativeTypeToScriptingClass (10ms)
+	initialDomainReloadingComplete (39ms)
+	LoadAllAssembliesAndSetupDomain (158ms)
+		LoadAssemblies (86ms)
 		AnalyzeDomain (148ms)
 			TypeCache.Refresh (147ms)
 				TypeCache.ScanAssembly (133ms)
-	FinalizeReload (267ms)
+	FinalizeReload (265ms)
 		SetupLoadedEditorAssemblies (0ms)
-			InitializePlatformSupportModulesInManaged (29ms)
-			BeforeProcessingInitializeOnLoad (58ms)
-			ProcessInitializeOnLoadAttributes (73ms)
+			InitializePlatformSupportModulesInManaged (33ms)
+			BeforeProcessingInitializeOnLoad (54ms)
+			ProcessInitializeOnLoadAttributes (69ms)
 			ProcessInitializeOnLoadMethodAttributes (61ms)
 [Licensing::Client] Successfully resolved entitlement details
 Application.AssetDatabase Initial Refresh Start
@@ -228,7 +228,7 @@ Application.AssetDatabase Initial Refresh Start
     com.unity.collections@6.4.0 (location: /Volumes/External Drive/unity/elysium_unity/Library/PackageCache/com.unity.collections@538ace9075bc)
     com.unity.ext.nunit@2.0.5 (location: /Volumes/External Drive/unity/elysium_unity/Library/PackageCache/com.unity.ext.nunit@d8c07649098d)
 [Subsystems] No new subsystems found in resolved package list.
-[Package Manager] Done registering packages in 0.00 seconds
+[Package Manager] Done registering packages in 0.01 seconds
 [ScriptCompilation] Requested script compilation because: AssetDatabase observed changes in script compilation related files
 info: Microsoft.Hosting.Lifetime[14]
       Now listening on: http://unix:/tmp/ilpp.sock-afc4ce5b2574b9fe5bb749b8c8ba2305
@@ -245,16 +245,16 @@ info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
 info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
       Executed endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
 info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
-      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping - 200 - application/grpc 27.3837ms
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping - 200 - application/grpc 34.2062ms
 Starting: /Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/Contents/Resources/BuildPipeline/bee_backend --ipc --defer-dag-verification --dagfile="Library/Bee/200b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
 WorkingDir: /Volumes/External Drive/unity/elysium_unity
 DisplayProgressbar: Compiling Scripts
 Starting: /Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/Contents/Resources/Scripting/netcorerun/netcorerun "/Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/Contents/Resources/BuildPipeline/ScriptCompilationBuildProgram.exe" "Library/Bee/200b0aE.dag.json" "Library/Bee/200b0aE-inputdata.json" "Library/Bee/buildprogram0.traceevents"
-ExitCode: 4 Duration: 0s136ms
-Rebuilding DAG because FileSignature timestamp changed: Library/Bee/200b0aE-inputdata.json
-*** Tundra requires additional run (0.12 seconds), 0 items updated, 0 evaluated
 WorkingDir: /Volumes/External Drive/unity/elysium_unity
-ExitCode: 0 Duration: 1s301ms
+ExitCode: 4 Duration: 0s175ms
+Rebuilding DAG because FileSignature timestamp changed: Library/Bee/200b0aE-inputdata.json
+*** Tundra requires additional run (0.16 seconds), 0 items updated, 0 evaluated
+ExitCode: 0 Duration: 1s293ms
 Starting: /Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/Contents/Resources/BuildPipeline/bee_backend --ipc --defer-dag-verification --dagfile="Library/Bee/200b0aE.dag" --continue-on-failure --dagfilejson="Library/Bee/200b0aE.dag.json" --profile="Library/Bee/backend2.traceevents" ScriptAssemblies
 WorkingDir: /Volumes/External Drive/unity/elysium_unity
 info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
@@ -272,7 +272,7 @@ info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
 info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
       Executed endpoint 'gRPC - /UnityILPP.PostProcessing/ConfigurePostProcessors'
 info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
-      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/ConfigurePostProcessors - 200 - application/grpc 59.4676ms
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/ConfigurePostProcessors - 200 - application/grpc 21.5736ms
 info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
       Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly - application/grpc -
 info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
@@ -319,25 +319,25 @@ info: Unity.ILPP.Runner.PostProcessingPipeline[0]
       running Unity.Netcode.Editor.CodeGen.RuntimeAccessModifiersILPP
 info: Unity.ILPP.Runner.PostProcessingPipeline[0]
       running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
+      Resolved Unity.Burst.Cecil.Rocks, Version=0.11.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e with Library/PackageCache/com.unity.burst@07790c2d06d9/Unity.Burst.CodeGen/Unity.Burst.Cecil.Rocks.dll
 info: Unity.ILPP.Runner.PostProcessingPipeline[0]
       running Unity.Netcode.Editor.CodeGen.RuntimeAccessModifiersILPP
 info: Unity.ILPP.Runner.PostProcessingPipeline[0]
       running zzzUnity.Burst.CodeGen.BurstILPostProcessor
-info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
-      Resolved Unity.Burst.Cecil.Rocks, Version=0.11.4.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e with Library/PackageCache/com.unity.burst@07790c2d06d9/Unity.Burst.CodeGen/Unity.Burst.Cecil.Rocks.dll
 info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
       Executed endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
 info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
-      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly - 200 - application/grpc 846.6825ms
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly - 200 - application/grpc 899.7367ms
 info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
       Executed endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
 info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
-      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly - 200 - application/grpc 1066.5543ms
-ExitCode: 0 Duration: 2s415ms
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly - 200 - application/grpc 1168.6742ms
+ExitCode: 0 Duration: 4s29ms
 Finished compiling graph: 960 nodes, 19925 flattened edges (16283 ToBuild, 164 ToUse), maximum node priority 1199
 [483/957    0s] WriteText Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.rsp
 [729/957    0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
-[949/957    0s] Csc Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.dll (+2 others)
+[949/957    2s] Csc Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.dll (+2 others)
 Assets/Scripts/Boot/WorldProjectValidationDebugPanel.cs(71,17): warning CS0618: 'Object.GetInstanceID()' is obsolete: 'GetInstanceID is deprecated. Use GetEntityId instead. This will be removed in a future version.'
 [950/957    0s] Csc Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp-Editor.dll (+2 others)
 [951/957    0s] ILPostProcess Library/Bee/artifacts/200b0aE.dag/post-processed/Assembly-CSharp-Editor.dll (+pdb)
@@ -349,7 +349,9 @@ running Unity.Netcode.Editor.CodeGen.INetworkSerializableILPP
 running Unity.Netcode.Editor.CodeGen.NetworkBehaviourILPP
 running Unity.Netcode.Editor.CodeGen.RuntimeAccessModifiersILPP
 running zzzUnity.Burst.CodeGen.BurstILPostProcessor
-[952/957    1s] ILPostProcess Library/Bee/artifacts/200b0aE.dag/post-processed/Assembly-CSharp.dll (+pdb)
+[952/957    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.pdb
+[953/957    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
+[954/957    1s] ILPostProcess Library/Bee/artifacts/200b0aE.dag/post-processed/Assembly-CSharp.dll (+pdb)
 Processing assembly Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp.dll, with 136 defines and 320 references
 processors: Unity.Jobs.CodeGen.JobsILPostProcessor, Unity.Netcode.Editor.CodeGen.INetworkMessageILPP, Unity.Netcode.Editor.CodeGen.INetworkSerializableILPP, Unity.Netcode.Editor.CodeGen.NetworkBehaviourILPP, Unity.Netcode.Editor.CodeGen.RuntimeAccessModifiersILPP, zzzUnity.Burst.CodeGen.BurstILPostProcessor
 running Unity.Jobs.CodeGen.JobsILPostProcessor
@@ -358,15 +360,13 @@ running Unity.Netcode.Editor.CodeGen.INetworkSerializableILPP
 running Unity.Netcode.Editor.CodeGen.NetworkBehaviourILPP
 running Unity.Netcode.Editor.CodeGen.RuntimeAccessModifiersILPP
 running zzzUnity.Burst.CodeGen.BurstILPostProcessor
-[953/957    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
-[954/957    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.pdb
 [955/957    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.pdb
 [956/957    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.dll
-*** Tundra build success (2.40 seconds), 10 items updated, 957 evaluated
+*** Tundra build success (4.01 seconds), 10 items updated, 957 evaluated
 Assets/Scripts/Boot/WorldProjectValidationDebugPanel.cs(71,17): warning CS0618: 'Object.GetInstanceID()' is obsolete: 'GetInstanceID is deprecated. Use GetEntityId instead. This will be removed in a future version.'
-AssetDatabase: script compilation time: 4.410931s
+AssetDatabase: script compilation time: 6.123434s
 Total cache size 58031808
-Total cache size after purge 58031808, took 00:00:00.0711422
+Total cache size after purge 58031808, took 00:00:00.0680219
 Begin MonoManager ReloadAssembly
 Assembly Assembly-CSharp-Editor-firstpass.dll at Library/ScriptAssemblies/Assembly-CSharp-Editor-firstpass.dll not valid. Loading of assembly skipped.
 Assembly Assembly-CSharp-firstpass.dll at Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll not valid. Loading of assembly skipped.
@@ -402,44 +402,33 @@ Assembly UnityEngine.Purchasing.WinRT.dll at Library/ScriptAssemblies/UnityEngin
 Assembly UnityEngine.SpatialTracking.Tests.dll at Library/ScriptAssemblies/UnityEngine.SpatialTracking.Tests.dll not valid. Loading of assembly skipped.
 Assembly UnityEngine.UI.Tests.dll at Library/ScriptAssemblies/UnityEngine.UI.Tests.dll not valid. Loading of assembly skipped.
 Symbol file LoadedFromMemory is not a mono symbol file
-Start importing Assets/StreamingAssets/WorldProjects/proto_village_square using Guid(2e7dcde650c9047b487ba26754020111) (DefaultImporter) -> (Import Result ID: 'ed7fe90e0b6b7ce784dd0fcddb70d10a') in 0.009843334 seconds [static dependencies only]. Details - ImportResultOutputID=cdeadcdac50f51e92fd8de63d0b14a2b DependenciesID=17eb79bd3dd31150f275f26d76dfaf1e StaticDependenciesID=5cb8e9fdf329095c741171689581614d 
-Start importing Assets/StreamingAssets/WorldProjects/proto_village_square/Areas using Guid(cea03fdb4d33c4ee3b8c148c2426cf8d) (DefaultImporter) -> (Import Result ID: 'b58d44152930545dc8956ce59d4d2a1d') in 0.001097375 seconds [static dependencies only]. Details - ImportResultOutputID=fe5621b9c85e89b44d80c049a6dbf9f2 DependenciesID=83bd934f51c0ac24f3c40d61e8a15a89 StaticDependenciesID=3b76861f16158dd5e92498aba677686d 
-Start importing Assets/StreamingAssets/WorldProjects/proto_village_square/Actors using Guid(ee839a8f4182c4798804bfc4fa3c02d1) (DefaultImporter) -> (Import Result ID: '3e9e9227f88aa4fa510d9a0cc8423159') in 0.00073425 seconds [static dependencies only]. Details - ImportResultOutputID=eaa89030d4b550c2bcb578bd2029047a DependenciesID=669f5d08424d5541f217d58906fc441a StaticDependenciesID=e33e6f086890255ae33df08820fbc8dc 
-Start importing Assets/StreamingAssets/WorldProjects/proto_village_square/Areas/area_proto_village using Guid(2bd1a52436b034454ac6e55b464c2687) (DefaultImporter) -> (Import Result ID: '1bd967849ceda5f0ebdfeb9b610e73bb') in 0.000644375 seconds [static dependencies only]. Details - ImportResultOutputID=a31f7b1c3ca8ba3a590ffce97d780a06 DependenciesID=a9a56c0a450bd3a9adea440bdb6a30f3 StaticDependenciesID=1ac2e821599f9c9ea1bbb4ffe47ac543 
-Refreshing native plugins compatible for Editor in 6.59 ms, found 1 plugins.
+Start importing Assets/Scripts/Prototype/Networking using Guid(888ff1454473e49cd863db3f435b2d11) (DefaultImporter) -> (Import Result ID: '555c90ef7204396daebd4b4387c1f662') in 0.013797208 seconds [static dependencies only]. Details - ImportResultOutputID=df8b27a15ccc54e5406c920693f965ea DependenciesID=13c39ca2f1e3e99afd8dd0c257df46c4 StaticDependenciesID=5b0435515225eec7346dc20e0b6c96db 
+Refreshing native plugins compatible for Editor in 6.75 ms, found 1 plugins.
 Native extension for OSXStandalone target not found
 Native extension for WebGL target not found
-Refreshing native plugins compatible for Editor in 2.22 ms, found 1 plugins.
 ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  2.216 seconds
-Domain Reload Profiling: 2707ms
-	BeginReloadAssembly (92ms)
+- Finished resetting the current domain, in  2.270 seconds
+Domain Reload Profiling: 2824ms
+	BeginReloadAssembly (133ms)
 		DisableScriptedObjects (6ms)
-		CreateAndSetChildDomain (20ms)
-	RebuildCommonClasses (24ms)
-	RebuildNativeTypeToScriptingClass (10ms)
-	initialDomainReloadingComplete (54ms)
-	LoadAllAssembliesAndSetupDomain (310ms)
-		LoadAssemblies (229ms)
-		AnalyzeDomain (117ms)
-			TypeCache.Refresh (90ms)
-				TypeCache.ScanAssembly (79ms)
-			BuildScriptInfoCaches (23ms)
-	FinalizeReload (2216ms)
+		CreateAndSetChildDomain (40ms)
+	RebuildCommonClasses (25ms)
+	RebuildNativeTypeToScriptingClass (11ms)
+	initialDomainReloadingComplete (64ms)
+	LoadAllAssembliesAndSetupDomain (320ms)
+		LoadAssemblies (258ms)
+		AnalyzeDomain (118ms)
+			TypeCache.Refresh (91ms)
+				TypeCache.ScanAssembly (80ms)
+			BuildScriptInfoCaches (24ms)
+	FinalizeReload (2271ms)
 		SetupLoadedEditorAssemblies (0ms)
-			InitializePlatformSupportModulesInManaged (12ms)
-			BeforeProcessingInitializeOnLoad (88ms)
-			ProcessInitializeOnLoadAttributes (1760ms)
-			ProcessInitializeOnLoadMethodAttributes (260ms)
+			InitializePlatformSupportModulesInManaged (15ms)
+			BeforeProcessingInitializeOnLoad (97ms)
+			ProcessInitializeOnLoadAttributes (1796ms)
+			ProcessInitializeOnLoadMethodAttributes (267ms)
 		AwakeInstancesAfterBackupRestoration (3ms)
-Start importing Assets/StreamingAssets/WorldProjects/proto_village_square/project.json using Guid(1a2aa587096f74ac493567161ed7064c) (DefaultImporter) -> (Import Result ID: 'e8a6854635645cf96f5faa85ad64e824') in 0.747645584 seconds [static dependencies only]. Details - ImportResultOutputID=2086608505974c582c8650881a3674a6 DependenciesID=97154527cc24e46e5d6455f39a8e3bbd StaticDependenciesID=4a650ca7990503f5378fee52ac832925 
-Start importing Assets/StreamingAssets/WorldProjects/proto_village_square/Actors/player_characters.json using Guid(7c96f035a56d344a6a708f1c521ca7f7) (DefaultImporter) -> (Import Result ID: 'b2dbc52c32af4f5c99ef8bc1ea3d34c0') in 0.001611 seconds [static dependencies only]. Details - ImportResultOutputID=95cf31eae720b5580af4036ab0510b51 DependenciesID=5186b22235a694ca8518154b9d6eaa4b StaticDependenciesID=8ba61a7dffed6904e540fd98abd5b789 
-Start importing Assets/StreamingAssets/WorldProjects/proto_village_square/Areas/area_proto_village/encounters.json using Guid(24fda77e9b39a4941bd40e7616c5ea04) (DefaultImporter) -> (Import Result ID: '2233c4bf75e1e7a1730caa0a27de4971') in 0.000909917 seconds [static dependencies only]. Details - ImportResultOutputID=934fc35a60c74695ba467b198e1e5995 DependenciesID=1811d485e0e7545461e3a4b10b2803ca StaticDependenciesID=0af89552c1ee68fbd66c03782b2e6045 
-Start importing Assets/StreamingAssets/WorldProjects/proto_village_square/Areas/area_proto_village/area.json using Guid(d48e39cc9abf646db908e0392f9e4558) (DefaultImporter) -> (Import Result ID: '038ccfca2ad13cb15625a5c998e8658e') in 0.000897625 seconds [static dependencies only]. Details - ImportResultOutputID=ca2d583ee088c1f00c4dcdcdfd6e9ed3 DependenciesID=7913e212ba3615b6ccafffac1da765d3 StaticDependenciesID=c4dd14f2cfa92c95f69c50bdc68fd54f 
-Start importing Assets/StreamingAssets/WorldProjects/proto_village_square/Areas/area_proto_village/placements.json using Guid(2610e52cd0a0843d39c1ae231ac2a431) (DefaultImporter) -> (Import Result ID: 'c558f28a111440199687d3341172e619') in 0.000663458 seconds [static dependencies only]. Details - ImportResultOutputID=f129bc1ee41bed3e9de056de1314fc00 DependenciesID=5d46edf55ddcbe7514d5ff6acf72900c StaticDependenciesID=73288d6f5f32b02c78a07b469612106e 
-Start importing Assets/StreamingAssets/WorldProjects/proto_village_square/Areas/area_proto_village/terrain.json using Guid(ed6b8a3ba703444e9bc3d13a83339d81) (DefaultImporter) -> (Import Result ID: '13627b5d0b58fad71d806ac56bef313f') in 0.000923333 seconds [static dependencies only]. Details - ImportResultOutputID=7f4e0ad4a82f49dfc6639ccb3b414d6c DependenciesID=5bd2d8f2c2098281aa3df6daea0d0ab8 StaticDependenciesID=153043a818c8c845cd29417f04c73ef3 
-Start importing Assets/StreamingAssets/WorldProjects/proto_village_square/Areas/area_proto_village/triggers.json using Guid(ff30bab850f9740a1b7cf1324ee8a252) (DefaultImporter) -> (Import Result ID: '716c6b841dd6c52ff3759a07673aa5f4') in 0.000797333 seconds [static dependencies only]. Details - ImportResultOutputID=546e417302e461aae78a7eb5fbdd8a18 DependenciesID=ba49c3c6ec12b45374be92910417a8b7 StaticDependenciesID=8ff93f8dc2c6a5116bda5d61ab045d58 
 [MODES] ModeService[none].Initialize
 [MODES] ModeService[none].LoadModes
 [MODES] Loading mode Default (0) for mode-current-id-elysium_unity
@@ -501,77 +490,78 @@ UnityEditor.AssetPostprocessingInternal:PostprocessAllAssets (string[],string[],
 [/Users/bokken/build/output/unity/unity/Editor/Mono/GUIView.cs line 64]
 
 (Values over 0.050ms)
-Asset Pipeline Refresh (id=39c149c6628a14d64910032ed0b10e9a): Total: 8.778 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+Asset Pipeline Refresh (id=52f43ff364ce848a68a35b37697819a6): Total: 9.905 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
 	Summary:
-		Imports: total=11 (actual=11, local cache=0, cache server=0)
-		Asset DB Process Time: managed=2 ms, native=3470 ms
-		Asset DB Callback time: managed=370 ms, native=10 ms
-		Scripting: domain reloads=1, domain reload time=490 ms, compile time=4412 ms, other=19 ms
-		Project Asset Count: scripts=1118, non-scripts=1604
-		Asset File Changes: new=12, changed=13, moved=0, deleted=0
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=2 ms, native=2734 ms
+		Asset DB Callback time: managed=454 ms, native=14 ms
+		Scripting: domain reloads=1, domain reload time=553 ms, compile time=6124 ms, other=20 ms
+		Project Asset Count: scripts=1119, non-scripts=1604
+		Asset File Changes: new=3, changed=4, moved=0, deleted=0
 		Scan Filter Count: 1
-	InvokePackagesCallback: 7.236ms
-	ApplyChangesToAssetFolders: 0.212ms
-	Scan: 317.623ms
-	OnSourceAssetsModified: 0.493ms
-	CategorizeScriptCompilationAssets: 36.727ms
-	ProcessAssetsWithTransientArtifactChanges: 23.605ms
-	CategorizeAssets: 16.967ms
-	CompileScripts: 4411.862ms
-	ImportOutOfDateAssets: 3002.929ms (2226.245ms without children)
-		ImportManagerImport: 775.882ms (2.864ms without children)
-			UpdateCategorizedAssets: 0.066ms
-		UnloadImportedAssets: 0.181ms
-		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.371ms
-		OnDemandSchedulerStart: 0.241ms
-	PostProcessAllAssets: 370.360ms
-		XRBuildSystem.XRAssetImported 0.183ms
-		MonoPostProcessAllAssets: 369.704ms
-			SyncVS.PostprocessSyncProject 151.843ms
-			SetupInputLayers.OnPostprocessAllAssets 122.094ms
-			AssetPostprocessor.OnPostprocessAllAssets 52.715ms
-			StyleCatalogPostProcessor.OnPostprocessAllAssets 11.056ms
-			BuilderAssetPostprocessor.OnPostprocessAllAssets 6.465ms
-			WindowAssetPostprocessingWatcher.OnPostprocessAllAssets 4.266ms
-			NetworkPrefabProcessor.OnPostprocessAllAssets 2.330ms
-			PackageManagerResolver.OnPostprocessAllAssets 2.289ms
-			VersionHandlerImpl.OnPostprocessAllAssets 1.229ms
-			RetainedModeAssetPostprocessor.OnPostprocessAllAssets 1.124ms
-			AssetChangedListener.OnPostprocessAllAssets 0.948ms
-			SpeedTree9Postprocessor.OnPostprocessAllAssets 0.554ms
-			AssetProcessor.OnPostprocessAllAssets 0.481ms
-			SpriteEditorTexturePostprocessor.OnPostprocessAllAssets 0.380ms
-			ArtifactBrowserPostProcessor.OnPostprocessAllAssets 0.320ms
-			IOSResolver.OnPostprocessAllAssets 0.265ms
-			TextAssetPostProcessor.OnPostprocessAllAssets 0.258ms
-			PlayServicesResolver.OnPostprocessAllAssets 0.241ms
-			UVCSAssetPostprocessor.OnPostprocessAllAssets 0.225ms
-			ReferencedClipsPostProcessor.OnPostprocessAllAssets 0.222ms
-			TMPro_TexturePostProcessor.OnPostprocessAllAssets 0.180ms
-			PT_ImportDetector.OnPostprocessAllAssets 0.169ms
+	InvokePackagesCallback: 9.438ms
+	ApplyChangesToAssetFolders: 0.184ms
+	Scan: 277.519ms
+	OnSourceAssetsModified: 0.372ms
+	CategorizeScriptCompilationAssets: 38.634ms
+	ProcessAssetsWithTransientArtifactChanges: 24.958ms
+	CategorizeAssets: 18.527ms
+	CompileScripts: 6124.267ms
+	ImportOutOfDateAssets: 2299.238ms (2281.454ms without children)
+		ImportManagerImport: 16.735ms (2.359ms without children)
+		UnloadImportedAssets: 0.190ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.398ms
+		OnDemandSchedulerStart: 0.457ms
+	PostProcessAllAssets: 456.129ms
+		VCAutoAddAssetPostprocess 1.632ms
+		ShaderAssetModifiedCallback 0.259ms
+		XRBuildSystem.XRAssetImported 0.190ms
+		MonoPostProcessAllAssets: 453.594ms
+			SetupInputLayers.OnPostprocessAllAssets 283.265ms
+			SyncVS.PostprocessSyncProject 97.261ms
+			AssetPostprocessor.OnPostprocessAllAssets 36.607ms
+			StyleCatalogPostProcessor.OnPostprocessAllAssets 10.653ms
+			WindowAssetPostprocessingWatcher.OnPostprocessAllAssets 4.942ms
+			BuilderAssetPostprocessor.OnPostprocessAllAssets 4.490ms
+			NetworkPrefabProcessor.OnPostprocessAllAssets 2.525ms
+			VersionHandlerImpl.OnPostprocessAllAssets 1.010ms
+			AssetChangedListener.OnPostprocessAllAssets 0.737ms
+			PackageManagerResolver.OnPostprocessAllAssets 0.727ms
+			RetainedModeAssetPostprocessor.OnPostprocessAllAssets 0.666ms
+			SpeedTree9Postprocessor.OnPostprocessAllAssets 0.395ms
+			ArtifactBrowserPostProcessor.OnPostprocessAllAssets 0.319ms
+			SpriteEditorTexturePostprocessor.OnPostprocessAllAssets 0.312ms
+			IOSResolver.OnPostprocessAllAssets 0.266ms
+			PlayServicesResolver.OnPostprocessAllAssets 0.248ms
+			ReferencedClipsPostProcessor.OnPostprocessAllAssets 0.211ms
+			UVCSAssetPostprocessor.OnPostprocessAllAssets 0.186ms
+			TMPro_TexturePostProcessor.OnPostprocessAllAssets 0.183ms
+			TextAssetPostProcessor.OnPostprocessAllAssets 0.176ms
+			AssetProcessor.OnPostprocessAllAssets 0.168ms
 			AudioMixerPostprocessor.OnPostprocessAllAssets 0.155ms
-			TerrainToolbarOverlayPostProcessor.OnPostprocessAllAssets 0.154ms
-			AssetEvents.OnPostprocessAllAssets 0.138ms
-			SpeedTreePostProcessor.OnPostprocessAllAssets 0.122ms
-			ConfigAssetsTracker.OnPostprocessAllAssets 0.099ms
-			SamplePostprocessor.OnPostprocessAllAssets 0.087ms
-			AssetDatabaseCallbacks.OnPostprocessAllAssets 0.074ms
-			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 0.073ms
+			AssetEvents.OnPostprocessAllAssets 0.149ms
+			PT_ImportDetector.OnPostprocessAllAssets 0.105ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 0.093ms
+			TerrainToolbarOverlayPostProcessor.OnPostprocessAllAssets 0.093ms
+			SpeedTreePostProcessor.OnPostprocessAllAssets 0.077ms
+			ConfigAssetsTracker.OnPostprocessAllAssets 0.070ms
+			SamplePostprocessor.OnPostprocessAllAssets 0.067ms
+			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 0.060ms
 			ScenarioDriftAssetsTracker.OnPostprocessAllAssets 0.056ms
-	PostAssetChangesProfiler: 3.519ms
-	UnloadStreamsBegin: 0.668ms
-	PersistCurrentRevisions: 0.109ms
-	GenerateScriptTypeHashes: 1.313ms
-	GenerateScriptTypeSerializationHashes: 2.991ms
-	Untracked: 584.460ms
+	PostAssetChangesProfiler: 3.250ms
+	UnloadStreamsBegin: 0.740ms
+	PersistCurrentRevisions: 0.108ms
+	GenerateScriptTypeHashes: 1.430ms
+	GenerateScriptTypeSerializationHashes: 3.202ms
+	Untracked: 650.897ms
 
 Application.AssetDatabase Initial Refresh End
-Scanning for USB devices : 0.355ms
+Scanning for USB devices : 0.337ms
 Initializing Unity extensions:
-Unloading 15 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4042 unused Assets / (1.7 MB). Loaded Objects now: 4624.
-Memory consumption went from 227.5 MB to 225.8 MB.
-Total: 10.948417 ms (FindLiveObjects: 0.212583 ms CreateObjectMapping: 0.129167 ms MarkObjects: 9.508500 ms  DeleteObjects: 1.097750 ms)
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 4034 unused Assets / (1.7 MB). Loaded Objects now: 4626.
+Memory consumption went from 222.0 MB to 220.3 MB.
+Total: 10.827833 ms (FindLiveObjects: 0.190333 ms CreateObjectMapping: 0.391708 ms MarkObjects: 9.356042 ms  DeleteObjects: 0.889333 ms)
 
 [AreaLifecycleService] Area activated: 'area_proto_village' (Proto Village Square)
 UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
@@ -585,7 +575,7 @@ Elysium.World.AreaLifecycleService:TryActivateEntryArea (Elysium.Packaging.World
 Elysium.Boot.ProtoAreaSmokeTestRunner:RunInternal () (at Assets/Scripts/Boot/ProtoAreaSmokeTestRunner.cs:71)
 Elysium.Boot.ProtoAreaSmokeTestRunner:RunProtoAreaSmokeTest () (at Assets/Scripts/Boot/ProtoAreaSmokeTestRunner.cs:35)
 Elysium.Editor.SmokeBatchRunner/<>c:<RunProtoSmokeSuite>b__1_2 (Elysium.Boot.ProtoAreaSmokeTestRunner) (at Assets/Editor/SmokeBatchRunner.cs:60)
-Elysium.Editor.SmokeBatchRunner:Run<Elysium.Boot.ProtoAreaSmokeTestRunner> (UnityEngine.GameObject,System.Action`1<Elysium.Boot.ProtoAreaSmokeTestRunner>,string,System.Text.StringBuilder) (at Assets/Editor/SmokeBatchRunner.cs:83)
+Elysium.Editor.SmokeBatchRunner:Run<Elysium.Boot.ProtoAreaSmokeTestRunner> (UnityEngine.GameObject,System.Action`1<Elysium.Boot.ProtoAreaSmokeTestRunner>,string,System.Text.StringBuilder) (at Assets/Editor/SmokeBatchRunner.cs:84)
 Elysium.Editor.SmokeBatchRunner:RunProtoSmokeSuite () (at Assets/Editor/SmokeBatchRunner.cs:60)
 
 (Filename: Assets/Scripts/World/AreaLifecycleService.cs Line: 101)
@@ -601,7 +591,7 @@ Elysium.World.AreaLifecycleService:DeactivateArea () (at Assets/Scripts/World/Ar
 Elysium.Boot.ProtoAreaSmokeTestRunner:RunInternal () (at Assets/Scripts/Boot/ProtoAreaSmokeTestRunner.cs:94)
 Elysium.Boot.ProtoAreaSmokeTestRunner:RunProtoAreaSmokeTest () (at Assets/Scripts/Boot/ProtoAreaSmokeTestRunner.cs:35)
 Elysium.Editor.SmokeBatchRunner/<>c:<RunProtoSmokeSuite>b__1_2 (Elysium.Boot.ProtoAreaSmokeTestRunner) (at Assets/Editor/SmokeBatchRunner.cs:60)
-Elysium.Editor.SmokeBatchRunner:Run<Elysium.Boot.ProtoAreaSmokeTestRunner> (UnityEngine.GameObject,System.Action`1<Elysium.Boot.ProtoAreaSmokeTestRunner>,string,System.Text.StringBuilder) (at Assets/Editor/SmokeBatchRunner.cs:83)
+Elysium.Editor.SmokeBatchRunner:Run<Elysium.Boot.ProtoAreaSmokeTestRunner> (UnityEngine.GameObject,System.Action`1<Elysium.Boot.ProtoAreaSmokeTestRunner>,string,System.Text.StringBuilder) (at Assets/Editor/SmokeBatchRunner.cs:84)
 Elysium.Editor.SmokeBatchRunner:RunProtoSmokeSuite () (at Assets/Editor/SmokeBatchRunner.cs:60)
 
 (Filename: Assets/Scripts/World/AreaLifecycleService.cs Line: 119)
@@ -618,7 +608,7 @@ Elysium.World.AreaLifecycleService:TryActivateEntryArea (Elysium.Packaging.World
 Elysium.Boot.ProtoAreaSmokeTestRunner:RunInternal () (at Assets/Scripts/Boot/ProtoAreaSmokeTestRunner.cs:105)
 Elysium.Boot.ProtoAreaSmokeTestRunner:RunProtoAreaSmokeTest () (at Assets/Scripts/Boot/ProtoAreaSmokeTestRunner.cs:35)
 Elysium.Editor.SmokeBatchRunner/<>c:<RunProtoSmokeSuite>b__1_2 (Elysium.Boot.ProtoAreaSmokeTestRunner) (at Assets/Editor/SmokeBatchRunner.cs:60)
-Elysium.Editor.SmokeBatchRunner:Run<Elysium.Boot.ProtoAreaSmokeTestRunner> (UnityEngine.GameObject,System.Action`1<Elysium.Boot.ProtoAreaSmokeTestRunner>,string,System.Text.StringBuilder) (at Assets/Editor/SmokeBatchRunner.cs:83)
+Elysium.Editor.SmokeBatchRunner:Run<Elysium.Boot.ProtoAreaSmokeTestRunner> (UnityEngine.GameObject,System.Action`1<Elysium.Boot.ProtoAreaSmokeTestRunner>,string,System.Text.StringBuilder) (at Assets/Editor/SmokeBatchRunner.cs:84)
 Elysium.Editor.SmokeBatchRunner:RunProtoSmokeSuite () (at Assets/Editor/SmokeBatchRunner.cs:60)
 
 (Filename: Assets/Scripts/World/AreaLifecycleService.cs Line: 101)
@@ -634,7 +624,7 @@ Elysium.World.AreaLifecycleService:DeactivateArea () (at Assets/Scripts/World/Ar
 Elysium.Boot.ProtoAreaSmokeTestRunner:RunInternal () (at Assets/Scripts/Boot/ProtoAreaSmokeTestRunner.cs:109)
 Elysium.Boot.ProtoAreaSmokeTestRunner:RunProtoAreaSmokeTest () (at Assets/Scripts/Boot/ProtoAreaSmokeTestRunner.cs:35)
 Elysium.Editor.SmokeBatchRunner/<>c:<RunProtoSmokeSuite>b__1_2 (Elysium.Boot.ProtoAreaSmokeTestRunner) (at Assets/Editor/SmokeBatchRunner.cs:60)
-Elysium.Editor.SmokeBatchRunner:Run<Elysium.Boot.ProtoAreaSmokeTestRunner> (UnityEngine.GameObject,System.Action`1<Elysium.Boot.ProtoAreaSmokeTestRunner>,string,System.Text.StringBuilder) (at Assets/Editor/SmokeBatchRunner.cs:83)
+Elysium.Editor.SmokeBatchRunner:Run<Elysium.Boot.ProtoAreaSmokeTestRunner> (UnityEngine.GameObject,System.Action`1<Elysium.Boot.ProtoAreaSmokeTestRunner>,string,System.Text.StringBuilder) (at Assets/Editor/SmokeBatchRunner.cs:84)
 Elysium.Editor.SmokeBatchRunner:RunProtoSmokeSuite () (at Assets/Editor/SmokeBatchRunner.cs:60)
 
 (Filename: Assets/Scripts/World/AreaLifecycleService.cs Line: 119)
@@ -685,20 +675,33 @@ Elysium.Editor.SmokeBatchRunner:RunProtoSmokeSuite () (at Assets/Editor/SmokeBat
   Created character 'pc_spike_c_integration_hero' via adapter for proto world — ok
 === Proto Area Smoke Test COMPLETE ===
 
+[ProtoNetworkParity] PASS
+=== Proto Network Parity Smoke Test ===
+Session opened through adapter -> SessionService — ok
+Players registered and GM assigned through adapter — ok
+Impersonation blocked: Client 2 cannot act as 'player_001'. — ok
+Non-GM assignment blocked: Requester 'player_001' is not authorised to assign characters. — ok
+GM character assignment via adapter -> SessionService — ok
+Lobby movement accepted through adapter -> ExplorationSyncService — ok
+Combat movement lockout enforced: Exploration movement is locked while session state is InCombat. — ok
+Post-combat movement accepted — ok
+Character ownership mapping preserved — ok
+=== Proto Network Parity Smoke Test COMPLETE ===
+
 UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
 UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
 UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
 UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
 UnityEngine.Logger:Log (UnityEngine.LogType,object)
 UnityEngine.Debug:Log (object)
-Elysium.Editor.SmokeBatchRunner:RunProtoSmokeSuite () (at Assets/Editor/SmokeBatchRunner.cs:62)
+Elysium.Editor.SmokeBatchRunner:RunProtoSmokeSuite () (at Assets/Editor/SmokeBatchRunner.cs:63)
 
-(Filename: Assets/Editor/SmokeBatchRunner.cs Line: 62)
+(Filename: Assets/Editor/SmokeBatchRunner.cs Line: 63)
 
 Curl error 42: Callback aborted
 Request timed out while processing request "https://public-cdn.cloud.unity3d.com/config/production", HTTP error code 0
 .[UnityConnect] Request timed out.
-Thread 0x3130bb000 may have been prematurely finalized
+Thread 0x16cf2f000 may have been prematurely finalized
 Input System module state changed to: ShutdownInProgress.
 Input Polling Thread exited.
 Input System module state changed to: Shutdown.
@@ -706,12 +709,12 @@ Input System module state changed to: Shutdown.
 [Physics::Module] Id: 0xf2b8ea05
 [Licensing::IpcConnector] LicenseClient-jws-6000.4.0-notifications channel disconnected successfully.
 [Licensing::IpcConnector] LicenseClient-jws-6000.4.0 channel disconnected successfully.
-Thread 0x16fa07000 may have been prematurely finalized
-Thread 0x16fc37000 may have been prematurely finalized
-Thread 0x16fcc3000 may have been prematurely finalized
-Thread 0x16fa93000 may have been prematurely finalized
-Thread 0x16fb1f000 may have been prematurely finalized
-Thread 0x16fbab000 may have been prematurely finalized
+Thread 0x16bec7000 may have been prematurely finalized
+Thread 0x16bf53000 may have been prematurely finalized
+Thread 0x16bfdf000 may have been prematurely finalized
+Thread 0x16be3b000 may have been prematurely finalized
+Thread 0x16c06b000 may have been prematurely finalized
+Thread 0x16c0f7000 may have been prematurely finalized
 AcceleratorClientConnectionCallback - disconnected - :0
 info: Microsoft.Hosting.Lifetime[0]
       Application is shutting down...
