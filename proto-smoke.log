@@ -7,9 +7,9 @@ Darwin version:          25.2.0
 Architecture:            arm64
 Running under Rosetta:   NO
 Available memory:        16384 MB
-Date:                    2026-03-29T10:31:56Z
+Date:                    2026-03-29T10:40:57Z
 [Licensing::Module] Trying to connect to existing licensing client channel...
-[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jws" at "2026-03-29T10:31:56.713324Z"
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jws" at "2026-03-29T10:40:57.965261Z"
 Launching external process: /Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/Contents/Helpers/PackageManager/Server/UnityPackageManager
 
 COMMAND LINE ARGUMENTS:
@@ -62,18 +62,18 @@ Successfully changed project path to: /Volumes/External Drive/unity/elysium_unit
     "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
 Player connection [8652532800]  Target information:
 
-Player connection [8652532800]  * "[IP] 192.168.68.53 [Port] 55504 [Flags] 2 [Guid] 721219590 [EditorId] 721219590 [Version] 1048832 [Id] OSXEditor(0,mac.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
+Player connection [8652532800]  * "[IP] 192.168.68.53 [Port] 55504 [Flags] 2 [Guid] 3017239776 [EditorId] 3017239776 [Version] 1048832 [Id] OSXEditor(0,mac.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
 
-Player connection [8652532800]  * "[IP] 192.168.68.68 [Port] 55504 [Flags] 2 [Guid] 721219590 [EditorId] 721219590 [Version] 1048832 [Id] OSXEditor(0,mac.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
+Player connection [8652532800]  * "[IP] 192.168.68.68 [Port] 55504 [Flags] 2 [Guid] 3017239776 [EditorId] 3017239776 [Version] 1048832 [Id] OSXEditor(0,mac.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
 
-Player connection [8652532800]  * "[IP] 100.114.232.52 [Port] 55504 [Flags] 2 [Guid] 721219590 [EditorId] 721219590 [Version] 1048832 [Id] OSXEditor(0,mac.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
+Player connection [8652532800]  * "[IP] 100.114.232.52 [Port] 55504 [Flags] 2 [Guid] 3017239776 [EditorId] 3017239776 [Version] 1048832 [Id] OSXEditor(0,mac.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
 
 Player connection [8652532800] Host joined multi-casting on [225.0.0.222:54997]...
 Player connection [8652532800] Host joined alternative multi-casting on [225.0.0.222:34997]...
 Input System module state changed to: Initialized.
 [Physics::Module] Initialized fallback backend.
 [Physics::Module] Id: 0xdecafbad
-[Package Manager] Connected to IPC stream "Upm-88115" after 0.2 seconds.
+[Package Manager] Connected to IPC stream "Upm-92205" after 0.2 seconds.
 [Licensing::Module] Licensing is not yet initialized.
 [Licensing::Client] Error: HandshakeResponse reported an error:
 	ResponseCode: 505
@@ -82,17 +82,17 @@ Input System module state changed to: Initialized.
 [Licensing::IpcConnector] LicenseClient-jws channel disconnected successfully.
 [Licensing::IpcConnector] Channel LicenseClient-jws-6000.4.0 doesn't exist
 Launching external process: /Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/Contents/Helpers/UnityLicensingClient.app/Contents/MacOS/Unity.Licensing.Client
-[Licensing::Module] Successfully launched the LicensingClient (PId: 88118)
-[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jws-6000.4.0" at "2026-03-29T10:31:57.439943Z"
+[Licensing::Module] Successfully launched the LicensingClient (PId: 92207)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jws-6000.4.0" at "2026-03-29T10:40:58.700821Z"
 [Licensing::Client] Handshaking with LicensingClient:
   Version:                 1.18.1+9fbee8e
-  Session Id:              47b8b39be1e641f1a57479a88a6caa3c
-  Correlation Id:          760c095bf9ba0884a78f43583f43a432
-  External correlation Id: 3848157879874986334
+  Session Id:              6413c3b1118b4562bee7afcaa077059c
+  Correlation Id:          923cb826d474a8279cfa2591d80f9825
+  External correlation Id: 690779806044091227
   Machine Id:              yoDbc3Pw2SFeowiq40Bz/HG+M10=
-[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-jws-6000.4.0" (connect: 0.39s, validation: 0.02s, handshake: 0.31s)
-[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jws-6000.4.0-notifications" at "2026-03-29T10:31:57.771007Z"
-[Licensing::Module] Connected to LicensingClient (PId: 88118, launch time: 0.00, total connection time: 0.72s)
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-jws-6000.4.0" (connect: 0.38s, validation: 0.03s, handshake: 0.42s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-jws-6000.4.0-notifications" at "2026-03-29T10:40:59.152736Z"
+[Licensing::Module] Connected to LicensingClient (PId: 92207, launch time: 0.00, total connection time: 0.83s)
 [Licensing::Module] Error: Access token is unavailable; failed to update
 [Licensing::Client] Successfully resolved entitlement details
 [Licensing::Module] License group:
@@ -100,10 +100,10 @@ Launching external process: /Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/
   Product: Unity Personal
   Type: Assigned
   Expiration: Unlimited
-[Licensing::Client] Successfully updated license, isAsync: True, time: 0.01
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.00
 [Licensing::Client] Successfully resolved entitlement details
-[Licensing::Module] Licensing Background thread has ended after 1.07s
-[Licensing::Module] Licensing is initialized (took 0.77s).
+[Licensing::Module] Licensing Background thread has ended after 1.20s
+[Licensing::Module] Licensing is initialized (took 0.86s).
 [Licensing::Client] Successfully resolved entitlement details
 Library Redirect Path: Library/
 [Physics::Module] Selected backend.
@@ -125,7 +125,7 @@ Initialize mono
 Mono path[0] = '/Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/Contents/Resources/Scripting/Managed'
 Mono path[1] = '/Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/Contents/Resources/Scripting/MonoBleedingEdge/lib/mono/unityjit-macos'
 Mono config path = '/Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/Contents/Resources/Scripting/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56115
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56205
 CodeReloadManager initialized
 Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
 Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
@@ -135,30 +135,30 @@ Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: /Applications/Unity/Hub/Editor/6000.4.0f1/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
 Register platform support module: /Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll
-Registered in 0.000579 seconds.
+Registered in 0.000484 seconds.
 Native extension for OSXStandalone target not found
 Native extension for WebGL target not found
 Package Manager log level set to [2]
 ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.258 seconds
-Domain Reload Profiling: 529ms
-	BeginReloadAssembly (61ms)
-		CreateAndSetChildDomain (13ms)
-	RebuildCommonClasses (26ms)
+- Finished resetting the current domain, in  0.264 seconds
+Domain Reload Profiling: 550ms
+	BeginReloadAssembly (69ms)
+		CreateAndSetChildDomain (19ms)
+	RebuildCommonClasses (27ms)
 	RebuildNativeTypeToScriptingClass (11ms)
-	initialDomainReloadingComplete (33ms)
-	LoadAllAssembliesAndSetupDomain (138ms)
-		LoadAssemblies (48ms)
-		AnalyzeDomain (132ms)
-			TypeCache.Refresh (131ms)
-				TypeCache.ScanAssembly (122ms)
-	FinalizeReload (259ms)
+	initialDomainReloadingComplete (34ms)
+	LoadAllAssembliesAndSetupDomain (144ms)
+		LoadAssemblies (50ms)
+		AnalyzeDomain (138ms)
+			TypeCache.Refresh (137ms)
+				TypeCache.ScanAssembly (126ms)
+	FinalizeReload (265ms)
 		SetupLoadedEditorAssemblies (0ms)
-			InitializePlatformSupportModulesInManaged (28ms)
-			BeforeProcessingInitializeOnLoad (58ms)
-			ProcessInitializeOnLoadAttributes (66ms)
-			ProcessInitializeOnLoadMethodAttributes (59ms)
+			InitializePlatformSupportModulesInManaged (27ms)
+			BeforeProcessingInitializeOnLoad (57ms)
+			ProcessInitializeOnLoadAttributes (71ms)
+			ProcessInitializeOnLoadMethodAttributes (61ms)
 [Licensing::Client] Successfully resolved entitlement details
 Application.AssetDatabase Initial Refresh Start
 [Package Manager] Restoring resolved packages state from cache
@@ -228,7 +228,7 @@ Application.AssetDatabase Initial Refresh Start
     com.unity.collections@6.4.0 (location: /Volumes/External Drive/unity/elysium_unity/Library/PackageCache/com.unity.collections@538ace9075bc)
     com.unity.ext.nunit@2.0.5 (location: /Volumes/External Drive/unity/elysium_unity/Library/PackageCache/com.unity.ext.nunit@d8c07649098d)
 [Subsystems] No new subsystems found in resolved package list.
-[Package Manager] Done registering packages in 0.00 seconds
+[Package Manager] Done registering packages in 0.01 seconds
 info: Microsoft.Hosting.Lifetime[14]
       Now listening on: http://unix:/tmp/ilpp.sock-afc4ce5b2574b9fe5bb749b8c8ba2305
 info: Microsoft.Hosting.Lifetime[0]
@@ -244,7 +244,7 @@ info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
 info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
       Executed endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
 info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
-      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping - 200 - application/grpc 19.7012ms
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping - 200 - application/grpc 25.1047ms
 Starting: /Applications/Unity/Hub/Editor/6000.4.0f1/Unity.app/Contents/Resources/BuildPipeline/bee_backend --ipc --defer-dag-verification --dagfile="Library/Bee/200b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
 WorkingDir: /Volumes/External Drive/unity/elysium_unity
 DisplayProgressbar: Compiling Scripts
@@ -263,14 +263,14 @@ info: Unity.ILPP.Runner.PostProcessingAssemblyLoadContext[0]
 info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
       Executed endpoint 'gRPC - /UnityILPP.PostProcessing/ConfigurePostProcessors'
 info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
-      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/ConfigurePostProcessors - 200 - application/grpc 19.0863ms
-ExitCode: 0 Duration: 0s356ms
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/ConfigurePostProcessors - 200 - application/grpc 19.7127ms
+ExitCode: 0 Duration: 0s310ms
 [731/957    0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
-*** Tundra build success (0.34 seconds), 1 items updated, 957 evaluated
-AssetDatabase: script compilation time: 0.807457s
+*** Tundra build success (0.29 seconds), 1 items updated, 957 evaluated
+AssetDatabase: script compilation time: 0.748255s
 Total cache size 58031808
+Total cache size after purge 58031808, took 00:00:00.0771175
 Begin MonoManager ReloadAssembly
-Total cache size after purge 58031808, took 00:00:00.0854628
 Assembly Assembly-CSharp-Editor-firstpass.dll at Library/ScriptAssemblies/Assembly-CSharp-Editor-firstpass.dll not valid. Loading of assembly skipped.
 Assembly Assembly-CSharp-firstpass.dll at Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll not valid. Loading of assembly skipped.
 Assembly DocCodeExamples.dll at Library/ScriptAssemblies/DocCodeExamples.dll not valid. Loading of assembly skipped.
@@ -309,73 +309,74 @@ Native extension for OSXStandalone target not found
 Native extension for WebGL target not found
 ScheduleIndexationOnStartup MainProcess:True IndexOnStartup:True
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  2.112 seconds
-Domain Reload Profiling: 2537ms
-	BeginReloadAssembly (112ms)
-		DisableScriptedObjects (7ms)
-		CreateAndSetChildDomain (39ms)
+- Finished resetting the current domain, in  2.211 seconds
+Domain Reload Profiling: 2635ms
+	BeginReloadAssembly (100ms)
+		DisableScriptedObjects (6ms)
+		CreateAndSetChildDomain (27ms)
 	RebuildCommonClasses (25ms)
-	RebuildNativeTypeToScriptingClass (10ms)
+	RebuildNativeTypeToScriptingClass (11ms)
 	initialDomainReloadingComplete (26ms)
-	LoadAllAssembliesAndSetupDomain (252ms)
-		LoadAssemblies (176ms)
-		AnalyzeDomain (111ms)
-			TypeCache.Refresh (84ms)
-				TypeCache.ScanAssembly (74ms)
-			BuildScriptInfoCaches (23ms)
+	LoadAllAssembliesAndSetupDomain (262ms)
+		LoadAssemblies (187ms)
+		AnalyzeDomain (113ms)
+			TypeCache.Refresh (85ms)
+				TypeCache.ScanAssembly (75ms)
+			BuildScriptInfoCaches (24ms)
 			ResolveRequiredComponents (3ms)
-	FinalizeReload (2112ms)
+	FinalizeReload (2211ms)
 		SetupLoadedEditorAssemblies (0ms)
 			InitializePlatformSupportModulesInManaged (14ms)
-			BeforeProcessingInitializeOnLoad (94ms)
-			ProcessInitializeOnLoadAttributes (1531ms)
-			ProcessInitializeOnLoadMethodAttributes (240ms)
+			BeforeProcessingInitializeOnLoad (92ms)
+			ProcessInitializeOnLoadAttributes (1620ms)
+			ProcessInitializeOnLoadMethodAttributes (387ms)
 		AwakeInstancesAfterBackupRestoration (3ms)
 (Values over 0.050ms)
-Asset Pipeline Refresh (id=907e81a13f4f145d1a05d8d07988c3c8): Total: 3.904 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+Asset Pipeline Refresh (id=6d8f935b0e334438c985960399fe42cd): Total: 3.892 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
 	Summary:
 		Imports: total=0 (actual=0, local cache=0, cache server=0)
-		Asset DB Process Time: managed=0 ms, native=2620 ms
-		Asset DB Callback time: managed=18 ms, native=6 ms
-		Scripting: domain reloads=1, domain reload time=425 ms, compile time=809 ms, other=23 ms
+		Asset DB Process Time: managed=0 ms, native=2643 ms
+		Asset DB Callback time: managed=40 ms, native=12 ms
+		Scripting: domain reloads=1, domain reload time=424 ms, compile time=749 ms, other=21 ms
 		Project Asset Count: scripts=1120, non-scripts=1605
 		Asset File Changes: new=0, changed=0, moved=0, deleted=0
 		Scan Filter Count: 1
-	InvokePackagesCallback: 7.369ms
-	ApplyChangesToAssetFolders: 0.194ms
-	Scan: 324.097ms
-	CategorizeScriptCompilationAssets: 19.933ms
-	ProcessAssetsWithTransientArtifactChanges: 26.515ms
-	CategorizeAssets: 56.069ms
-	CompileScripts: 808.876ms
-	ImportOutOfDateAssets: 2117.871ms (2116.980ms without children)
-		UnloadImportedAssets: 0.210ms
-		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.451ms
-		OnDemandSchedulerStart: 0.227ms
-	PostProcessAllAssets: 18.669ms
-		MonoPostProcessAllAssets: 18.634ms
-			SyncVS.PostprocessSyncProject 5.626ms
-			WindowAssetPostprocessingWatcher.OnPostprocessAllAssets 5.323ms
-			SpeedTree9Postprocessor.OnPostprocessAllAssets 0.450ms
-			ReferencedClipsPostProcessor.OnPostprocessAllAssets 0.207ms
-			AssetDatabaseCallbacks.OnPostprocessAllAssets 0.133ms
-			TerrainToolbarOverlayPostProcessor.OnPostprocessAllAssets 0.103ms
-	UnloadStreamsBegin: 0.628ms
-	PersistCurrentRevisions: 0.072ms
-	GenerateScriptTypeHashes: 39.999ms
-	GenerateScriptTypeSerializationHashes: 80.427ms
-	Untracked: 523.288ms
+	InvokePackagesCallback: 12.877ms
+	ApplyChangesToAssetFolders: 0.192ms
+	Scan: 286.732ms
+	CategorizeScriptCompilationAssets: 19.838ms
+	ProcessAssetsWithTransientArtifactChanges: 27.910ms
+	CategorizeAssets: 17.085ms
+	CompileScripts: 749.122ms
+	ImportOutOfDateAssets: 2216.489ms (2215.692ms without children)
+		UnloadImportedAssets: 0.198ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.386ms
+		OnDemandSchedulerStart: 0.208ms
+	PostProcessAllAssets: 40.670ms
+		MonoPostProcessAllAssets: 40.636ms
+			WindowAssetPostprocessingWatcher.OnPostprocessAllAssets 16.094ms
+			RenderPipelineGlobalSettingsPostprocessor.OnPostprocessAllAssets 5.919ms
+			SyncVS.PostprocessSyncProject 5.541ms
+			SpeedTree9Postprocessor.OnPostprocessAllAssets 0.565ms
+			ReferencedClipsPostProcessor.OnPostprocessAllAssets 0.219ms
+			TerrainToolbarOverlayPostProcessor.OnPostprocessAllAssets 0.123ms
+			AssetDatabaseCallbacks.OnPostprocessAllAssets 0.107ms
+	UnloadStreamsBegin: 0.688ms
+	PersistCurrentRevisions: 0.068ms
+	GenerateScriptTypeHashes: 1.270ms
+	GenerateScriptTypeSerializationHashes: 2.843ms
+	Untracked: 519.775ms
 
 Application.AssetDatabase Initial Refresh End
-Scanning for USB devices : 0.373ms
+Scanning for USB devices : 0.910ms
 Initializing Unity extensions:
 [MODES] ModeService[none].Initialize
 [MODES] ModeService[none].LoadModes
 [MODES] Loading mode Default (0) for mode-current-id-elysium_unity
 Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 4036 unused Assets / (1.3 MB). Loaded Objects now: 4619.
-Memory consumption went from 181.7 MB to 180.3 MB.
-Total: 10.663500 ms (FindLiveObjects: 0.220833 ms CreateObjectMapping: 0.164792 ms MarkObjects: 9.278166 ms  DeleteObjects: 0.999209 ms)
+Unloading 4037 unused Assets / (1.7 MB). Loaded Objects now: 4620.
+Memory consumption went from 174.2 MB to 172.5 MB.
+Total: 10.556500 ms (FindLiveObjects: 0.204375 ms CreateObjectMapping: 0.128792 ms MarkObjects: 9.328708 ms  DeleteObjects: 0.894042 ms)
 
 [AreaLifecycleService] Area activated: 'area_proto_village' (Proto Village Square)
 UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
@@ -530,7 +531,7 @@ Elysium.Editor.SmokeBatchRunner:RunProtoSmokeSuite () (at Assets/Editor/SmokeBat
 Curl error 42: Callback aborted
 Request timed out while processing request "https://public-cdn.cloud.unity3d.com/config/production", HTTP error code 0
 .[UnityConnect] Request timed out.
-Thread 0x16fce3000 may have been prematurely finalized
+Thread 0x16f73b000 may have been prematurely finalized
 Input System module state changed to: ShutdownInProgress.
 Input Polling Thread exited.
 Input System module state changed to: Shutdown.
@@ -538,15 +539,11 @@ Input System module state changed to: Shutdown.
 [Physics::Module] Id: 0xf2b8ea05
 [Licensing::IpcConnector] LicenseClient-jws-6000.4.0-notifications channel disconnected successfully.
 [Licensing::IpcConnector] LicenseClient-jws-6000.4.0 channel disconnected successfully.
-Thread 0x170373000 may have been prematurely finalized
-Thread 0x1703ff000 may have been prematurely finalized
-Thread 0x17048b000 may have been prematurely finalized
-Thread 0x170517000 may have been prematurely finalized
-Thread 0x1706bb000 may have been prematurely finalized
-Thread 0x17062f000 may have been prematurely finalized
-Thread 0x1705a3000 may have been prematurely finalized
-Thread 0x170747000 may have been prematurely finalized
-Thread 0x1707d3000 may have been prematurely finalized
+Thread 0x16fd3f000 may have been prematurely finalized
+Thread 0x16fdcb000 may have been prematurely finalized
+Thread 0x16fee3000 may have been prematurely finalized
+Thread 0x16fe57000 may have been prematurely finalized
+Thread 0x16ff6f000 may have been prematurely finalized
 AcceleratorClientConnectionCallback - disconnected - :0
 info: Microsoft.Hosting.Lifetime[0]
       Application is shutting down...

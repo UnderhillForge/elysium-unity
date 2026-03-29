@@ -46,12 +46,15 @@ namespace Elysium.Boot
         private ProtoNetworkProtocolAdapter protocolAdapter;
         private GameObject activeCharacterInstance;
         private Camera sceneCamera;
+        private string assignedCharacterId = string.Empty;
 
         public SessionService Session => protocolAdapter?.Session;
         public ExplorationSyncService Exploration => protocolAdapter?.Exploration;
         public WorldProject ActiveProject => activeProject;
         public AreaLifecycleService AreaLifecycle => areaLifecycle;
         public GameObject ActiveCharacterInstance => activeCharacterInstance;
+        public string AssignedCharacterId => assignedCharacterId;
+        public string LastMovementStatus { get; private set; } = "No movement yet.";
 
         private void Start()
         {
@@ -93,10 +96,12 @@ namespace Elysium.Boot
             {
                 activeCharacterInstance.transform.position = nextPosition;
                 activeCharacterInstance.transform.rotation = Quaternion.Euler(0f, facingYaw, 0f);
+                LastMovementStatus = $"Accepted: {nextPosition.x:F1}, {nextPosition.z:F1}";
             }
             else
             {
                 Debug.LogWarning($"[ProtoPlayableBootstrap] Movement rejected: {error}");
+                LastMovementStatus = $"Rejected: {error}";
             }
         }
 
@@ -173,6 +178,8 @@ namespace Elysium.Boot
                 return false;
             }
 
+            assignedCharacterId = selectedCharacterId;
+
             if (!protocolAdapter.TryHostArea(areaLifecycle.ActiveAreaId, out var hostAreaError))
             {
                 Debug.LogError($"[ProtoPlayableBootstrap] Failed hosting exploration area: {hostAreaError}");
@@ -184,6 +191,7 @@ namespace Elysium.Boot
                 : Vector3.zero;
 
             SpawnOrReplaceCharacter(spawnPosition);
+            LastMovementStatus = "Ready. Use WASD/arrow keys to move.";
             Debug.Log($"[ProtoPlayableBootstrap] Boot complete. world='{activeProject.Definition.DisplayName}' area='{areaLifecycle.ActiveAreaId}' player='{localPlayerId}' character='{selectedCharacterId}'.");
             return true;
         }

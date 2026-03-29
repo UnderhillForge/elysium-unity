@@ -54,6 +54,12 @@ namespace Elysium.Editor
             bootstrapSerialized.FindProperty("bootOnStart").boolValue = true;
             bootstrapSerialized.ApplyModifiedPropertiesWithoutUndo();
 
+            var hudObject = new GameObject("ProtoPlayableDebugHud");
+            var hud = hudObject.AddComponent<ProtoPlayableDebugHud>();
+            var hudSerialized = new SerializedObject(hud);
+            hudSerialized.FindProperty("bootstrap").objectReferenceValue = bootstrap;
+            hudSerialized.ApplyModifiedPropertiesWithoutUndo();
+
             EditorSceneManager.SaveScene(scene, ScenePath);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
