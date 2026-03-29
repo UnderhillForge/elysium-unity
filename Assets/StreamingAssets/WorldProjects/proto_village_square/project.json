@@ -1,0 +1,15 @@
+{
+  "projectId": "com.elysium.proto.village-square",
+  "displayName": "Proto Village Square",
+  "author": "Elysium Team",
+  "ownerPlayerId": "gm.elysium.default",
+  "collaborators": [],
+  "ruleset": "Pathfinder1e",
+  "entryAreaId": "area_proto_village",
+  "worldDatabasePath": "Databases/world.db",
+  "campaignDatabasePath": "Databases/campaign.db",
+  "createdUtc": "2026-03-28T00:00:00Z",
+  "updatedUtc": "2026-03-28T00:00:00Z",
+  "defaultPackageMode": "Template",
+  "notes": "Prototype walkthrough world using RPGPP_LT exterior assets. Placeholder — replace with authored content."
+}

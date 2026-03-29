@@ -1,0 +1,52 @@
+{
+  "characters": [
+    {
+      "Id": "pc_proto_fighter",
+      "DisplayName": "Proto Fighter",
+      "Ruleset": "Pathfinder1e",
+      "Level": 1,
+      "AbilityStrength": 16,
+      "AbilityDexterity": 13,
+      "AbilityConstitution": 14,
+      "AbilityIntelligence": 10,
+      "AbilityWisdom": 10,
+      "AbilityCharisma": 8,
+      "HitPointsMax": 12,
+      "HitPointsCurrent": 12,
+      "ArmorClass": 17,
+      "ArmorClassTouch": 11,
+      "ArmorClassFlatFooted": 16,
+      "BaseAttackBonus": 1,
+      "CriticalThreatRange": 20,
+      "CriticalMultiplier": 2,
+      "SaveFortitude": 4,
+      "SaveReflex": 1,
+      "SaveWill": 1,
+      "ExperiencePoints": 0
+    },
+    {
+      "Id": "pc_proto_cleric",
+      "DisplayName": "Proto Cleric",
+      "Ruleset": "Pathfinder1e",
+      "Level": 1,
+      "AbilityStrength": 10,
+      "AbilityDexterity": 10,
+      "AbilityConstitution": 12,
+      "AbilityIntelligence": 10,
+      "AbilityWisdom": 16,
+      "AbilityCharisma": 14,
+      "HitPointsMax": 9,
+      "HitPointsCurrent": 9,
+      "ArmorClass": 16,
+      "ArmorClassTouch": 10,
+      "ArmorClassFlatFooted": 16,
+      "BaseAttackBonus": 0,
+      "CriticalThreatRange": 20,
+      "CriticalMultiplier": 2,
+      "SaveFortitude": 3,
+      "SaveReflex": 1,
+      "SaveWill": 5,
+      "ExperiencePoints": 0
+    }
+  ]
+}

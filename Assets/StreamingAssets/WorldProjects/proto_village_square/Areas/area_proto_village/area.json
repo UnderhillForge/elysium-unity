@@ -1,0 +1,12 @@
+{
+  "areaId": "area_proto_village",
+  "displayName": "Proto Village Square",
+  "biome": "Village",
+  "sizeMeters": {
+    "x": 96,
+    "z": 96
+  },
+  "entrySpawnId": "spawn_proto_entry",
+  "lightingProfile": "day_clear",
+  "musicCue": ""
+}

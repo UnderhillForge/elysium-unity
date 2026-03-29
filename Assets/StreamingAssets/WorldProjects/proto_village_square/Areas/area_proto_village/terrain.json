@@ -1,0 +1,19 @@
+{
+  "heightmap": {
+    "resolution": 97,
+    "source": "inline-flat"
+  },
+  "layers": [
+    {
+      "id": "cobblestone",
+      "weight": 0.6
+    },
+    {
+      "id": "dirt",
+      "weight": 0.4
+    }
+  ],
+  "walkability": {
+    "source": "generated"
+  }
+}
