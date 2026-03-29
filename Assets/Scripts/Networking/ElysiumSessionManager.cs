@@ -268,15 +268,13 @@ namespace Elysium.Networking
             string displayName,
             ServerRpcParams rpcParams = default)
         {
-            var record = new PlayerSessionRecord
-            {
-                PlayerId = playerId,
-                DisplayName = displayName,
-                NetworkClientId = rpcParams.Receive.SenderClientId,
-                Role = PlayerRole.Player,
-            };
-
-            if (!sessionService.TryRegisterPlayer(record, out var error))
+            if (!TryRegisterPlayerFromClient(
+                    sessionService,
+                    rpcParams.Receive.SenderClientId,
+                    playerId,
+                    displayName,
+                    out var record,
+                    out var error))
             {
                 Debug.LogWarning($"[Session] Could not register player {displayName}: {error}");
                 return;
@@ -297,14 +295,6 @@ namespace Elysium.Networking
             string targetCombatantId,
             ServerRpcParams rpcParams = default)
         {
-            // Verify the network client matches the requester.
-            var player = sessionService.GetPlayerByClientId(rpcParams.Receive.SenderClientId);
-            if (player == null || !string.Equals(player.PlayerId, requesterId, StringComparison.Ordinal))
-            {
-                Debug.LogWarning($"[Session] Client {rpcParams.Receive.SenderClientId} tried to act as '{requesterId}'.");
-                return;
-            }
-
             var request = new TurnActionRequest
             {
                 CombatantId = combatantId,
@@ -314,9 +304,50 @@ namespace Elysium.Networking
                 TargetCombatantId = targetCombatantId
             };
 
-            if (!combatNetworkService.TrySubmitAction(requesterId, request, out _, out var error))
+            if (!TrySubmitActionFromClient(
+                    sessionService,
+                    combatNetworkService,
+                    rpcParams.Receive.SenderClientId,
+                    requesterId,
+                    request,
+                    out _,
+                    out var error))
             {
                 Debug.LogWarning($"[Session] Action rejected for {requesterId}: {error}");
+            }
+        }
+
+        /// Players submit exploration movement through here.
+        [ServerRpc(RequireOwnership = false)]
+        public void SubmitExplorationMovementServerRpc(
+            string requesterId,
+            string areaId,
+            Vector3 position,
+            float facingYaw,
+            ServerRpcParams rpcParams = default)
+        {
+            if (explorationSyncService == null)
+            {
+                explorationSyncService = new ExplorationSyncService();
+                explorationSyncService.SnapshotPublished += HandleExplorationSnapshot;
+            }
+
+            if (string.IsNullOrWhiteSpace(explorationSyncService.ActiveAreaId))
+            {
+                explorationSyncService.HostArea(areaId, "Exploration area hosted from movement RPC.");
+            }
+
+            if (!TrySubmitExplorationMovementFromClient(
+                    sessionService,
+                    explorationSyncService,
+                    rpcParams.Receive.SenderClientId,
+                    requesterId,
+                    areaId,
+                    position,
+                    facingYaw,
+                    out var error))
+            {
+                Debug.LogWarning($"[Session] Exploration movement rejected for {requesterId}: {error}");
             }
         }
 
@@ -329,14 +360,15 @@ namespace Elysium.Networking
             string resolutionText,
             ServerRpcParams rpcParams = default)
         {
-            var player = sessionService.GetPlayerByClientId(rpcParams.Receive.SenderClientId);
-            if (player == null || !string.Equals(player.PlayerId, gmPlayerId, StringComparison.Ordinal))
-            {
-                Debug.LogWarning($"[Session] Client {rpcParams.Receive.SenderClientId} tried to resolve as GM.");
-                return;
-            }
-
-            if (!combatNetworkService.TryResolvePendingAction(gmPlayerId, actionId, approved, resolutionText, out var error))
+            if (!TryResolveActionFromClient(
+                    sessionService,
+                    combatNetworkService,
+                    rpcParams.Receive.SenderClientId,
+                    gmPlayerId,
+                    actionId,
+                    approved,
+                    resolutionText,
+                    out var error))
             {
                 Debug.LogWarning($"[Session] Action resolution failed for {gmPlayerId}: {error}");
             }
@@ -346,17 +378,226 @@ namespace Elysium.Networking
         [ServerRpc(RequireOwnership = false)]
         public void EndTurnServerRpc(string requesterId, ServerRpcParams rpcParams = default)
         {
-            var player = sessionService.GetPlayerByClientId(rpcParams.Receive.SenderClientId);
-            if (player == null || !string.Equals(player.PlayerId, requesterId, StringComparison.Ordinal))
-            {
-                Debug.LogWarning($"[Session] Client {rpcParams.Receive.SenderClientId} tried to end turn as '{requesterId}'.");
-                return;
-            }
-
-            if (!combatNetworkService.TryEndTurn(requesterId, out var error))
+            if (!TryEndTurnFromClient(
+                    sessionService,
+                    combatNetworkService,
+                    rpcParams.Receive.SenderClientId,
+                    requesterId,
+                    out var error))
             {
                 Debug.LogWarning($"[Session] End turn rejected for {requesterId}: {error}");
             }
+        }
+
+        internal static bool TryRegisterPlayerFromClient(
+            SessionService sessionService,
+            ulong senderClientId,
+            string playerId,
+            string displayName,
+            out PlayerSessionRecord record,
+            out string error)
+        {
+            record = null;
+            error = string.Empty;
+
+            if (sessionService == null)
+            {
+                error = "Session service is required.";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(playerId))
+            {
+                error = "PlayerId is required.";
+                return false;
+            }
+
+            var existingByClient = sessionService.GetPlayerByClientId(senderClientId);
+            if (existingByClient != null && !string.Equals(existingByClient.PlayerId, playerId, StringComparison.Ordinal))
+            {
+                error = $"Client {senderClientId} is already bound to player '{existingByClient.PlayerId}'.";
+                return false;
+            }
+
+            record = new PlayerSessionRecord
+            {
+                PlayerId = playerId,
+                DisplayName = displayName,
+                NetworkClientId = senderClientId,
+                Role = PlayerRole.Player,
+            };
+
+            return sessionService.TryRegisterPlayer(record, out error);
+        }
+
+        internal static bool TrySubmitExplorationMovementFromClient(
+            SessionService sessionService,
+            ExplorationSyncService explorationSyncService,
+            ulong senderClientId,
+            string requesterId,
+            string areaId,
+            Vector3 position,
+            float facingYaw,
+            out string error)
+        {
+            if (!TryAuthorizeClientPlayer(sessionService, senderClientId, requesterId, out _, out error))
+            {
+                return false;
+            }
+
+            if (explorationSyncService == null)
+            {
+                error = "Exploration sync service is required.";
+                return false;
+            }
+
+            return explorationSyncService.TryUpdateMovement(sessionService, requesterId, areaId, position, facingYaw, out error);
+        }
+
+        internal static bool TrySubmitActionFromClient(
+            SessionService sessionService,
+            CombatNetworkService combatNetworkService,
+            ulong senderClientId,
+            string requesterId,
+            TurnActionRequest request,
+            out ActionResolution resolution,
+            out string error)
+        {
+            resolution = null;
+            if (!TryAuthorizeClientPlayer(sessionService, senderClientId, requesterId, out var player, out error))
+            {
+                return false;
+            }
+
+            if (combatNetworkService == null)
+            {
+                error = "Combat network service is required.";
+                return false;
+            }
+
+            if (!TryResolveEffectiveCombatRequesterId(player, out var effectiveRequesterId, out error))
+            {
+                return false;
+            }
+
+            return combatNetworkService.TrySubmitAction(effectiveRequesterId, request, out resolution, out error);
+        }
+
+        internal static bool TryResolveActionFromClient(
+            SessionService sessionService,
+            CombatNetworkService combatNetworkService,
+            ulong senderClientId,
+            string requesterId,
+            string actionId,
+            bool approved,
+            string resolutionText,
+            out string error)
+        {
+            if (!TryAuthorizeClientPlayer(sessionService, senderClientId, requesterId, out var player, out error))
+            {
+                return false;
+            }
+
+            if (combatNetworkService == null)
+            {
+                error = "Combat network service is required.";
+                return false;
+            }
+
+            if (!TryResolveEffectiveCombatRequesterId(player, out var effectiveRequesterId, out error))
+            {
+                return false;
+            }
+
+            return combatNetworkService.TryResolvePendingAction(effectiveRequesterId, actionId, approved, resolutionText, out error);
+        }
+
+        internal static bool TryEndTurnFromClient(
+            SessionService sessionService,
+            CombatNetworkService combatNetworkService,
+            ulong senderClientId,
+            string requesterId,
+            out string error)
+        {
+            if (!TryAuthorizeClientPlayer(sessionService, senderClientId, requesterId, out var player, out error))
+            {
+                return false;
+            }
+
+            if (combatNetworkService == null)
+            {
+                error = "Combat network service is required.";
+                return false;
+            }
+
+            if (!TryResolveEffectiveCombatRequesterId(player, out var effectiveRequesterId, out error))
+            {
+                return false;
+            }
+
+            return combatNetworkService.TryEndTurn(effectiveRequesterId, out error);
+        }
+
+        internal static bool TryResolveEffectiveCombatRequesterId(
+            PlayerSessionRecord player,
+            out string effectiveRequesterId,
+            out string error)
+        {
+            effectiveRequesterId = string.Empty;
+            error = string.Empty;
+
+            if (player == null)
+            {
+                error = "Player record is required.";
+                return false;
+            }
+
+            if (player.IsGM)
+            {
+                effectiveRequesterId = player.PlayerId;
+                return true;
+            }
+
+            if (string.IsNullOrWhiteSpace(player.AssignedCombatantId))
+            {
+                error = $"Player '{player.PlayerId}' has no assigned combatant.";
+                return false;
+            }
+
+            effectiveRequesterId = player.AssignedCombatantId;
+            return true;
+        }
+
+        internal static bool TryAuthorizeClientPlayer(
+            SessionService sessionService,
+            ulong senderClientId,
+            string requesterId,
+            out PlayerSessionRecord player,
+            out string error)
+        {
+            player = null;
+            error = string.Empty;
+
+            if (sessionService == null)
+            {
+                error = "Session service is required.";
+                return false;
+            }
+
+            player = sessionService.GetPlayerByClientId(senderClientId);
+            if (player == null)
+            {
+                error = $"Client {senderClientId} is not registered in the session.";
+                return false;
+            }
+
+            if (!string.Equals(player.PlayerId, requesterId, StringComparison.Ordinal))
+            {
+                error = $"Client {senderClientId} cannot act as '{requesterId}'.";
+                return false;
+            }
+
+            return true;
         }
 
         // ── Internals ─────────────────────────────────────────────────────────
