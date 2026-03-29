@@ -47,6 +47,34 @@ namespace Elysium.Editor
             EditorApplication.Exit(0);
         }
 
+        public static void RunProtoSmokeSuite()
+        {
+            var log = new StringBuilder();
+            log.AppendLine("=== Elysium Prototype Smoke Suite (Batch) ===");
+
+            var root = new GameObject("ProtoSmokeBatchRunner");
+            try
+            {
+                Run<ProtoCharacterCreationSmokeTestRunner>(root, r => r.RunProtoCharacterCreationSmokeTest(), "ProtoCharacterCreation", log);
+                Run<ProtoInventorySmokeTestRunner>(root, r => r.RunProtoInventorySmokeTest(), "ProtoInventory", log);
+
+                Debug.Log(log.ToString());
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError(log.ToString());
+                Debug.LogError($"Proto smoke suite failed: {ex}");
+                EditorApplication.Exit(1);
+                return;
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(root);
+            }
+
+            EditorApplication.Exit(0);
+        }
+
         private static void Run<T>(GameObject root, Action<T> execute, string name, StringBuilder log)
             where T : MonoBehaviour
         {
