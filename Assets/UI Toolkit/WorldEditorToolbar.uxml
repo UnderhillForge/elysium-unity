@@ -1,0 +1,32 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="world-editor-toolbar" style="position: absolute; top: 8px; left: 8px; width: 340px; padding-left: 10px; padding-right: 10px; padding-top: 8px; padding-bottom: 8px; background-color: rgba(15, 18, 24, 0.82); border-top-left-radius: 8px; border-top-right-radius: 8px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
+        <ui:Label text="GM World Editor" style="-unity-font-style: bold; color: rgb(242, 246, 252); margin-bottom: 6px;" />
+
+        <ui:VisualElement style="flex-direction: row; gap: 4px; margin-bottom: 6px;">
+            <ui:Button name="tool-sculpt" text="Sculpt" />
+            <ui:Button name="tool-paint" text="Paint" />
+            <ui:Button name="tool-place" text="Place" />
+            <ui:Button name="tool-water" text="Water" />
+        </ui:VisualElement>
+
+        <ui:VisualElement style="flex-direction: row; gap: 4px; margin-bottom: 6px;">
+            <ui:Button name="sculpt-raise" text="Raise" />
+            <ui:Button name="sculpt-lower" text="Lower" />
+            <ui:Button name="sculpt-smooth" text="Smooth" />
+            <ui:Button name="sculpt-flatten" text="Flatten" />
+            <ui:Button name="undo" text="Undo" />
+        </ui:VisualElement>
+
+        <ui:Label text="Brush Radius" style="color: rgb(208, 217, 226);" />
+        <ui:Slider name="brush-radius" low-value="0.5" high-value="24" value="4" />
+
+        <ui:Label text="Sculpt Strength" style="color: rgb(208, 217, 226);" />
+        <ui:Slider name="brush-strength" low-value="0.01" high-value="2" value="0.3" />
+
+        <ui:Label text="Paint Layer" style="color: rgb(208, 217, 226);" />
+        <ui:SliderInt name="paint-layer" low-value="0" high-value="7" value="0" />
+
+        <ui:Label text="Paint Opacity" style="color: rgb(208, 217, 226);" />
+        <ui:Slider name="paint-opacity" low-value="0" high-value="1" value="0.35" />
+    </ui:VisualElement>
+</ui:UXML>
