@@ -40,6 +40,7 @@ namespace Elysium.WorldEditor
 
         [Header("God Mode")]
         [SerializeField] private KeyCode toggleGodModeKey = KeyCode.F1;
+        [SerializeField] private WorldEditorUI editorUI;
         [SerializeField] private bool godModeEnabled;
         [SerializeField] private WorldEditorTool activeTool = WorldEditorTool.Sculpt;
         [SerializeField] private SculptOperation activeSculptOperation = SculptOperation.Raise;
@@ -82,6 +83,8 @@ namespace Elysium.WorldEditor
         private bool pendingSave;
         private bool suppressDirtyTracking;
         private bool useInjectedServices;
+        private bool lastLocalGodModeAccess;
+        private bool hasCachedLocalGodModeAccess;
 
         private readonly List<WorldEditorAreaSnapshot> undoStack = new List<WorldEditorAreaSnapshot>();
 
@@ -93,6 +96,8 @@ namespace Elysium.WorldEditor
         public float PaintRadiusMeters => paintRadiusMeters;
         public float PaintOpacity => paintOpacity;
         public int PaintLayerIndex => paintLayerIndex;
+
+        public event Action<bool> OnGodModeChanged;
 
         private void Awake()
         {
@@ -119,7 +124,13 @@ namespace Elysium.WorldEditor
                 targetTerrain = Terrain.activeTerrain;
             }
 
+            if (editorUI == null)
+            {
+                editorUI = GetComponent<WorldEditorUI>();
+            }
+
             RebuildPlaceableCatalog();
+            CheckAndUpdateGodModeUI(force: true);
         }
 
         public override void OnDestroy()
@@ -161,17 +172,26 @@ namespace Elysium.WorldEditor
                     Debug.LogWarning($"[WorldEditor] Persistence unavailable: {initError}");
                 }
             }
+
+            CheckAndUpdateGodModeUI(force: true);
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(toggleGodModeKey) && CanUseLocalGodModeInput())
+            var canUseLocalGodMode = CanUseLocalGodModeInput();
+            if (!hasCachedLocalGodModeAccess || canUseLocalGodMode != lastLocalGodModeAccess)
             {
-                godModeEnabled = !godModeEnabled;
-                Debug.Log($"[WorldEditor] God Mode {(godModeEnabled ? "enabled" : "disabled")}");
+                hasCachedLocalGodModeAccess = true;
+                lastLocalGodModeAccess = canUseLocalGodMode;
+                CheckAndUpdateGodModeUI(force: true);
             }
 
-            if (!godModeEnabled || !CanUseLocalGodModeInput())
+            if (Input.GetKeyDown(toggleGodModeKey) && canUseLocalGodMode)
+            {
+                ToggleGodMode();
+            }
+
+            if (!godModeEnabled || !canUseLocalGodMode)
             {
                 return;
             }
@@ -323,6 +343,25 @@ namespace Elysium.WorldEditor
 
             SubmitUndoServerRpc();
             return true;
+        }
+
+        public void ToggleGodMode()
+        {
+            SetGodModeEnabled(!godModeEnabled);
+        }
+
+        public void SetGodModeEnabled(bool enabled)
+        {
+            if (godModeEnabled == enabled)
+            {
+                CheckAndUpdateGodModeUI(force: true);
+                return;
+            }
+
+            godModeEnabled = enabled;
+            Debug.Log($"[WorldEditor] God Mode {(godModeEnabled ? "enabled" : "disabled")}");
+            CheckAndUpdateGodModeUI(force: true);
+            OnGodModeChanged?.Invoke(godModeEnabled);
         }
 
         public bool TryGetBrushWorldPoint(out Vector3 worldPoint)
@@ -701,6 +740,22 @@ namespace Elysium.WorldEditor
             var localClientId = NetworkManager.Singleton == null ? ulong.MaxValue : NetworkManager.Singleton.LocalClientId;
             var player = sessionManager.Session.GetPlayerByClientId(localClientId);
             return player != null && player.IsGM;
+        }
+
+        private void CheckAndUpdateGodModeUI(bool force = false)
+        {
+            if (editorUI == null)
+            {
+                return;
+            }
+
+            var shouldShow = godModeEnabled && CanUseLocalGodModeInput();
+            if (!force && editorUI.IsVisible == shouldShow)
+            {
+                return;
+            }
+
+            editorUI.SetVisible(shouldShow);
         }
 
         private bool TryInitializePersistence(out string error)

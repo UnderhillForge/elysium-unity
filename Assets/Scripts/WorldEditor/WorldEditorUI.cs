@@ -30,6 +30,8 @@ namespace Elysium.WorldEditor
         private EventCallback<ChangeEvent<int>> paintLayerChanged;
         private EventCallback<ChangeEvent<float>> paintOpacityChanged;
 
+        public bool IsVisible { get; private set; }
+
         private void Awake()
         {
             if (manager == null)
@@ -47,6 +49,8 @@ namespace Elysium.WorldEditor
             {
                 return;
             }
+
+            manager.OnGodModeChanged += HandleGodModeChanged;
 
             sculptButton = root.Q<Button>("tool-sculpt");
             paintButton = root.Q<Button>("tool-paint");
@@ -101,6 +105,8 @@ namespace Elysium.WorldEditor
                 paintOpacityChanged = evt => manager.SetPaintOpacity(evt.newValue);
                 paintOpacitySlider.RegisterValueChangedCallback(paintOpacityChanged);
             }
+
+            SetVisible(manager.GodModeEnabled && manager.IsSpawned);
         }
 
         private void OnDisable()
@@ -124,6 +130,28 @@ namespace Elysium.WorldEditor
             {
                 paintOpacitySlider.UnregisterValueChangedCallback(paintOpacityChanged);
             }
+
+            if (manager != null)
+            {
+                manager.OnGodModeChanged -= HandleGodModeChanged;
+            }
+        }
+
+        public void SetVisible(bool visible)
+        {
+            var root = document == null ? null : document.rootVisualElement;
+            if (root == null)
+            {
+                return;
+            }
+
+            root.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            IsVisible = visible;
+        }
+
+        private void HandleGodModeChanged(bool enabled)
+        {
+            SetVisible(enabled);
         }
     }
 }

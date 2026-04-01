@@ -10,9 +10,10 @@ using UnityEngine.UIElements;
 
 namespace Elysium.Editor
 {
-    internal static class WorldEditorSceneSetupUtility
+    public static class WorldEditorSceneSetupUtility
     {
         private const string MainScenePath = "Assets/main.unity";
+        private const string ProtoBootScenePath = "Assets/Scenes/Proto/ProtoBoot.unity";
         private const string ToolbarAssetPath = "Assets/UI Toolkit/WorldEditorToolbar.uxml";
         private const string BrushMaterialPath = "Assets/Materials/WorldEditorBrushPreview.mat";
 
@@ -26,6 +27,19 @@ namespace Elysium.Editor
         private static void OpenMainAndSetup()
         {
             SetupScene(openMainScene: true);
+        }
+
+        [MenuItem("Elysium/World Editor/Open ProtoBoot.unity And Setup")]
+        private static void OpenProtoBootAndSetup()
+        {
+            SetupSceneAtPath(ProtoBootScenePath);
+        }
+
+        // Public entrypoint for batchmode: -executeMethod Elysium.Editor.WorldEditorSceneSetupUtility.SetupProtoBootSceneBatch
+        public static void SetupProtoBootSceneBatch()
+        {
+            SetupSceneAtPath(ProtoBootScenePath);
+            AssetDatabase.SaveAssets();
         }
 
         private static void SetupScene(bool openMainScene)
@@ -47,6 +61,26 @@ namespace Elysium.Editor
                 EditorSceneManager.OpenScene(MainScenePath, OpenSceneMode.Single);
             }
 
+            ApplyWorldEditorSetup();
+        }
+
+        private static void SetupSceneAtPath(string scenePath)
+        {
+            var scene = AssetDatabase.LoadAssetAtPath<SceneAsset>(scenePath);
+            if (scene == null)
+            {
+                Debug.LogError($"[WorldEditorSetup] Could not find scene at {scenePath}.");
+                return;
+            }
+
+            EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
+            ApplyWorldEditorSetup();
+            EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());
+            Debug.Log($"[WorldEditorSetup] Saved scene at {scenePath}.");
+        }
+
+        private static void ApplyWorldEditorSetup()
+        {
             var root = FindOrCreate("WorldEditor");
             var networkObject = root.GetComponent<NetworkObject>() ?? Undo.AddComponent<NetworkObject>(root);
             var manager = root.GetComponent<WorldEditorManager>() ?? Undo.AddComponent<WorldEditorManager>(root);
@@ -71,6 +105,7 @@ namespace Elysium.Editor
             SetObjectField(manager, "sessionManager", sessionManager);
             SetObjectField(manager, "targetTerrain", terrain);
             SetObjectField(manager, "placeablesRoot", placeablesRoot);
+            SetObjectField(manager, "editorUI", ui);
             SetObjectField(ui, "manager", manager);
             SetObjectField(preview, "manager", manager);
 
